@@ -1,0 +1,21 @@
+import { getDocs, collection, query, orderBy } from 'firebase/firestore';
+import { db } from '@/config/firebase';
+import { Product } from '@/lib/utils';
+import { mapDocToProduct } from './productUtill';
+import { useQuery } from 'react-query';
+
+// 모든 상품 불러오기 (페이지네이션 X)
+export const FetchAllProducts = async (): Promise<Product[]> => {
+  const productsQuery = query(collection(db, 'Product'), orderBy('createdAt'));
+
+  const querySnapshot = await getDocs(productsQuery);
+  return querySnapshot.docs.map(mapDocToProduct);
+};
+
+export function useFetchAllProducts() {
+  return useQuery({
+    queryKey: ['all-products'],
+    queryFn: FetchAllProducts,
+    staleTime: Infinity,
+  });
+}

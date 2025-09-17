@@ -71,10 +71,10 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
     navigate('/basket');
   };
   return (
-    <article className="h-full w-full">
-      <div className="h-3/5 flex items-center justify-center">
-        <div>
-          <figure className="w-96 h-96 border mr-10">
+    <article className="h-full w-[80%] ">
+      <div className="flex justify-center gap-52">
+        <div className="mt-12 items-center justify-center" id="figureSection">
+          <figure className="w-240 h-240 border ">
             <img
               src={product.imageUrl}
               alt={product.productName}
@@ -83,92 +83,98 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
             <figcaption className="sr-only">{product.productName}</figcaption>
           </figure>
         </div>
-        <div className="h-full  flex flex-col items-center justify-center">
-          <header className="w-full divide-y divide-y-0.5 divide-slate-600">
-            <h1 className="text-3xl  w-full text-left my-5">
-              {product.productName}
-            </h1>
-            <div className="w-full">
-              <h1 className="text-2xl font-bold w-full text-left my-5">
-                남은 수량 :{' '}
-                {product.productPrice
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              </h1>
-            </div>
-            <div className="w-full">
-              <h1 className="text-xl  w-full text-left my-5">
-                남은 수량 : {product.productQuantity}
-              </h1>
-            </div>
-
-            <div className="w-full">
-              <h1 className="text-xl  w-full text-left my-5">
-                구매수량 :
+        <div className="mt-12 flex flex-col justify-between" id="infoSection">
+          {/* 상품명 */}
+          <h1 className="text-2xl font-bold text-gray-900">
+            {product.productName}
+          </h1>
+          <div className="space-y-6 mt-auto">
+            {/* 구매 수량 */}
+            <div className="flex items-center justify-between">
+              <span className="text-lg text-black">구매수량</span>
+              <div className="flex items-center space-x-2">
                 <button
-                  className="border border-gray-300 bg-gray-200 text-gray-800 px-3 py-1 rounded mx-1"
+                  className="w-9 h-9 flex items-center justify-center rounded border border-gray-300 bg-gray-50 text-lg font-bold hover:bg-gray-100"
                   onClick={decrementCount}
                   type="button"
                 >
-                  -
+                  −
                 </button>
-                {orderProductCount}
+                <span className="text-lg font-semibold">
+                  {orderProductCount}
+                </span>
                 <button
-                  className="border border-gray-300 bg-gray-200 text-gray-800 px-3 py-1 rounded mx-1"
+                  className="w-9 h-9 flex items-center justify-center rounded border border-gray-300 bg-gray-50 text-lg font-bold hover:bg-gray-100"
                   onClick={incrementCount}
                   type="button"
                 >
                   +
                 </button>
-              </h1>
+              </div>
             </div>
+          </div>
 
-            <div className="w-full">
-              <h1 className="text-2xl font-bold mt-5 text-left">
-                총 상품 가격 :{' '}
-                {(product.productPrice * orderProductCount)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                원
-              </h1>
-            </div>
-          </header>
-          <main className="my-5 space-x-10">
-            <Button className="px-10">구매하기</Button>
-            {finishiCart === true ? (
-              <Button className="px-7" onClick={goToBaseketPagae}>
+          {/* 가격 정보 */}
+          <div className="space-y-2 text-left">
+            <p className="text-black">
+              배송비 : <span className="font-medium">3,000원</span>
+            </p>
+            <p className="text-2xl font-bold ">
+              총 금액 :{' '}
+              {(product.productPrice * orderProductCount + 3000)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              원
+            </p>
+          </div>
+
+          {/* 버튼 영역 */}
+          <div className="flex gap-3 pt-4">
+            <Button className="flex-1 py-3 text-lg bg-green-500 hover:bg-green-600">
+              구매하기
+            </Button>
+            {finishiCart ? (
+              <Button
+                className="flex-1 py-3 text-lg bg-gray-700 hover:bg-gray-800"
+                onClick={goToBaseketPagae}
+              >
                 장바구니보기
               </Button>
             ) : (
-              <Button className="px-7" onClick={handleAddToCart}>
+              <Button
+                className="flex-1 py-3 text-lg bg-blue-600 hover:bg-blue-700"
+                onClick={handleAddToCart}
+              >
                 장바구니담기
               </Button>
             )}
-          </main>
+          </div>
         </div>
       </div>
-      <footer className=" justify-center">
-        같은 카테고리의 다른 상품들
-        <Carousel
-          opts={{ loop: true }}
-          plugins={[]}
-          orientation="horizontal"
-          setApi={() => {}}
-          className="flex justify-center items-center"
-        >
-          <CarouselContent className="flex ">
-            {sameCategoryProducts?.map(sameproduct => (
-              <CarouselItem
-                key={sameproduct.id}
-                className="flex justify-center items-center basis-1/4  mx-2"
-              >
-                <MainProductCard key={product.id} product={sameproduct} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+
+      <footer className="flex flex-col justify-center items-center mt-12 ">
+        <h3 className="text-lg font-semibold mb-12">
+          같은 카테고리의 다른 상품들
+        </h3>
+        <div className="w-[80%] mb-24">
+          <Carousel
+            opts={{ loop: true }}
+            plugins={[]}
+            setApi={setEmblaApi}
+            orientation="horizontal"
+            className="flex justify-center"
+          >
+            <CarouselContent className="">
+              {sameCategoryProducts?.map(sameproduct => (
+                <CarouselItem key={sameproduct.id} className="basis-1/3">
+                  <MainProductCard product={sameproduct} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </div>
       </footer>
     </article>
   );

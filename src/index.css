@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
 @layer base {
   :root {
@@ -69,6 +70,7 @@
 @layer base {
   * {
     @apply border-border;
+     font-family: 'Noto Sans KR', sans-serif;
   }
   body {
     @apply bg-background text-foreground;

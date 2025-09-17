@@ -1,5 +1,5 @@
 import { useQuery, useInfiniteQuery } from 'react-query';
-import { FetchProducts } from './FetchProducts';
+import { FetchProducts } from './UseFetchInfinityProducts';
 import { FetchProductsResult, ProductCard } from '@/lib/utils';
 import { fetchProductCardData } from './FetchProductCardData';
 

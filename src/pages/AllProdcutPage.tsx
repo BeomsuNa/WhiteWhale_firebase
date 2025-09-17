@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useFetchInfiniteProducts } from '@/hooks/UseFetchData';
 import MainProductCard from '@/components/ui/MainProductCard';
 import { useInView } from 'react-intersection-observer';
@@ -7,58 +7,64 @@ import { ProductCard } from '@/lib/utils';
 import { useFetchSortedProducts } from '@/hooks/FetchSortedProducts';
 import { v4 as uuidv4 } from 'uuid';
 import Skele from '@/components/ui/Skele';
+import { useFetchAllProducts } from '@/hooks/useFetchAllProducts';
 
 const AllProductPage: React.FC = () => {
   const { category, setCategory } = useProductCategory();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useFetchInfiniteProducts();
+  // const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  //   useFetchInfiniteProducts();
+  const { data, isLoading, error } = useFetchAllProducts();
   const { ref, inView } = useInView({
-    threshold: 0.7,
+    threshold: 0.5,
     triggerOnce: false,
   });
   const [sortOption, setSortOption] = useState('productPrice');
-  const {
-    data: products,
-    isLoading,
-    error,
-  } = useFetchSortedProducts(sortOption);
   const [sortedProducts, setSortedProducts] = useState<ProductCard[]>([]);
 
-  const callbackmessage = () => {
-    fetchNextPage();
-  };
+  const lastFetchedPage = useRef<number>(0);
+  // useEffect(() => {
+  //   if (inView && hasNextPage && !isFetchingNextPage) {
+  //     fetchNextPage();
+  //     const nextPage = data?.pages?.length ?? 0;
+  //     if (lastFetchedPage.current < nextPage) {
+  //       fetchNextPage();
+  //       lastFetchedPage.current = nextPage;
+  //     }
+  //   }
+  // }, [inView, hasNextPage, isFetchingNextPage]);
 
-  React.useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, isFetchingNextPage]);
+  // useEffect(() => {
+  //   if (data) {
+  //     const allProducts = data.pages.flatMap(page => page.products);
+  //     const filteredProducts = category
+  //       ? allProducts.filter(product => product.productCategory === category)
+  //       : allProducts;
+  //     const sortedArray = [...filteredProducts];
+  //     if (sortOption === 'updatedAt') {
+  //       sortedArray.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+  //     } else if (sortOption === 'productPrice') {
+  //       sortedArray.sort((a, b) => b.productPrice - a.productPrice);
+  //     }
 
-  useEffect(() => {
-    if (data) {
-      const allProducts = data.pages.flatMap(page => page.products);
-      const filteredProducts = category
-        ? allProducts.filter(product => product.productCategory === category)
-        : allProducts;
+  //     setSortedProducts(sortedArray);
+  //   }
+  // }, [sortOption, data, category]);
 
-      const sortedArray = [...filteredProducts];
-      if (sortOption === 'updatedAt') {
-        sortedArray.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
-      } else if (sortOption === 'productPrice') {
-        sortedArray.sort((a, b) => b.productPrice - a.productPrice);
-      }
+  // useEffect(() => {
+  //   if (data) {
+  //     performance.mark('first-product-rendered');
 
-      setSortedProducts(sortedArray);
-    }
-  }, [sortOption, data, category]);
+  //     performance.measure(
+  //       'TTFP', // Time To First Product
+  //       'navigationStart',
+  //       'first-product-rendered',
+  //     );
 
-  if (isLoading) {
-    return <div>Loadinhg...</div>;
-  }
+  //     const ttfp = performance.getEntriesByName('TTFP')[0].duration;
 
-  if (error) {
-    return <div>에러 발생</div>;
-  }
+  //     console.log('TTFP (첫 상품 렌더링까지 걸린 시간):', ttfp, 'ms');
+  //   }
+  // }, [data]);
 
   const handleSortByPrice = () => {
     setSortOption('productPrice');
@@ -76,7 +82,7 @@ const AllProductPage: React.FC = () => {
   const hanldeaccessory = () => {
     setCategory('accessory');
   };
-  console.log('카테고리:', category);
+
   return (
     <main>
       <div className="p-20">
@@ -141,17 +147,22 @@ const AllProductPage: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap justify-start">
+        {/* <div className="grid grid-cols-3 gap-4">
           {sortedProducts.map(product => (
             <MainProductCard key={product.id} product={product} />
           ))}
-          <div ref={ref} className="w-full h-full">
+          <div ref={ref} className="h-20 background-transparent">
             {isFetchingNextPage && (
               <div className="w-full h-full min-h-0.5">
                 <h1 className="w-full h-full">현재 로딩중입니다.</h1>
               </div>
             )}
           </div>
+        </div> */}
+        <div className="flex flex-wrap justify-start">
+          {data?.map(product => (
+            <MainProductCard key={product.id} product={product} />
+          ))}
         </div>
       </div>
     </main>

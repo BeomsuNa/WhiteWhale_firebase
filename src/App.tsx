@@ -1,6 +1,5 @@
 import { Outlet } from 'react-router-dom';
 import './App.css';
-import Main from './pages/BackGroundPage';
 import { AuthProvider } from './components/context/AuthContext';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Header from './components/ui/TopBar';
@@ -18,16 +17,15 @@ function App() {
         <AuthProvider>
           <ProductCategoryProvider>
             <div
-              className="w-full h-screen flex:1 flex-col justify-start  bg-backgroundColor "
+              className="w-full min-h-screen flex flex-col justify-start  bg-backgroundColor "
               id="mainSection"
             >
               <Header />
               <SideDrawer />
               <PageHeader />
-              <Main />
-              {/* <div className="flex-grow"> */}
-              <Outlet />
-              {/* </div> */}
+              <div className="flex items-center justify-center flex-grow ">
+                <Outlet />
+              </div>
               <Footer />
             </div>
           </ProductCategoryProvider>

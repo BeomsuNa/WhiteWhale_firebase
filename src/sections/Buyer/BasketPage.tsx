@@ -17,7 +17,7 @@ const BasketPage: React.FC = () => {
   };
   console.log('현재 장바구니는?', cart);
   return (
-    <article className="w-ful pl-20 pr-20">
+    <article className="w-full p-20">
       <header className="text-2xl mb-4">장바구니</header>
       {cart.length === 0 ? (
         <p>장바구니가 비어 있습니다.</p>

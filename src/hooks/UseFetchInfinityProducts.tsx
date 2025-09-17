@@ -4,11 +4,11 @@ import {
   query,
   limit,
   startAfter,
-  QueryDocumentSnapshot,
   orderBy,
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
-import { Product, FetchProductsResult } from '@/lib/utils';
+import { FetchProductsResult } from '@/lib/utils';
+import { mapDocToProduct } from './productUtill';
 
 const PAGE_SIZE = 10;
 
@@ -23,24 +23,7 @@ const FetchProducts = async ({
   );
   const querySnapshot = await getDocs(productsQuery);
   const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-  const productPromises = querySnapshot.docs.map(
-    async (doc: QueryDocumentSnapshot) => {
-      const docData = doc.data();
-      const product: Product = {
-        id: doc.id,
-        createdAt: docData.createdAt,
-        productCategory: docData.productCategory,
-        productDescription: docData.productDescription,
-        productName: docData.productName,
-        productPrice: docData.productPrice,
-        productQuantity: docData.productQuantity,
-        sellerId: docData.sellerId,
-        updatedAt: docData.updatedAt,
-        imageUrl: docData.imageUrl,
-      };
-      return product;
-    },
-  );
+  const productPromises = querySnapshot.docs.map(mapDocToProduct);
   const products = await Promise.all(productPromises);
   return {
     products,
