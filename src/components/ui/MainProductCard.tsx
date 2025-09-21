@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ProductCard } from '@/lib/utils';
+import { ProductCard } from '@/lib/product';
 import { Link } from 'react-router-dom';
 import { usePreFetchProduct } from '@/hooks/PreFetch';
 

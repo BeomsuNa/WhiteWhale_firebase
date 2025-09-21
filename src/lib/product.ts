@@ -31,6 +31,7 @@ export interface FetchProductsResult {
 
 export interface ProductCard {
   id: string;
+  email: string;
   productCategory: string;
   productName: string;
   productPrice: number;

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import MainProductCard from '../components/ui/MainProductCard';
 import { useFetchInfiniteProducts } from './UseFetchData';
-import { Product } from '@/lib/utils';
+import { Product } from '@/lib/product';
 
 const ProductList: React.FC = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =

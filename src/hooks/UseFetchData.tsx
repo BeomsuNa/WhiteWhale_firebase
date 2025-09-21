@@ -1,6 +1,6 @@
 import { useQuery, useInfiniteQuery } from 'react-query';
 import { FetchProducts } from './UseFetchInfinityProducts';
-import { FetchProductsResult, ProductCard } from '@/lib/utils';
+import { FetchProductsResult, ProductCard } from '@/lib/product';
 import { fetchProductCardData } from './FetchProductCardData';
 
 export const useFetchInfiniteProducts = () => {

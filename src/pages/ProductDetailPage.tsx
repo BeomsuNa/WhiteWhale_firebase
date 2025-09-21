@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ProductCard } from '@/lib/utils';
+import { ProductCard } from '@/lib/product';
 import { useFetchProductCardData } from '@/hooks/UseFetchData';
 import MainProductCard from '@/components/ui/MainProductCard';
 import {
@@ -67,9 +67,6 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
     }
   };
 
-  const goToBaseketPagae = () => {
-    navigate('/basket');
-  };
   return (
     <article className="h-full w-[80%] ">
       <div className="flex justify-center gap-52">
@@ -130,24 +127,16 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
 
           {/* 버튼 영역 */}
           <div className="flex gap-3 pt-4">
-            <Button className="flex-1 py-3 text-lg bg-green-500 hover:bg-green-600">
+            {/* <Button className="flex-1 py-3 text-lg bg-green-500 hover:bg-green-600">
               구매하기
+            </Button> */}
+
+            <Button
+              className="flex-1 py-3 text-lg bg-blue-600 hover:bg-blue-700"
+              onClick={handleAddToCart}
+            >
+              장바구니담기
             </Button>
-            {finishiCart ? (
-              <Button
-                className="flex-1 py-3 text-lg bg-gray-700 hover:bg-gray-800"
-                onClick={goToBaseketPagae}
-              >
-                장바구니보기
-              </Button>
-            ) : (
-              <Button
-                className="flex-1 py-3 text-lg bg-blue-600 hover:bg-blue-700"
-                onClick={handleAddToCart}
-              >
-                장바구니담기
-              </Button>
-            )}
           </div>
         </div>
       </div>

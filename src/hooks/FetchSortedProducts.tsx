@@ -7,7 +7,7 @@ import {
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
-import { ProductCard } from '@/lib/utils';
+import { ProductCard } from '@/lib/product';
 
 const fetchSortedProducts = async (
   sortField: string,

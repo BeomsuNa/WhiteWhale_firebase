@@ -9,7 +9,7 @@ import {
   DocumentData,
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
-import { ProductCard } from '@/lib/utils';
+import { ProductCard } from '@/lib/product';
 
 const productCardConverter: FirestoreDataConverter<ProductCard> = {
   toFirestore(productCard: ProductCard): DocumentData {

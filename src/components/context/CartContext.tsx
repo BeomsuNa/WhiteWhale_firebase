@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { CartProduct } from '@/lib/utils';
+import { CartProduct } from '@/lib/product';
 import { db } from '@/config/firebase';
 
 interface CartContextType {
@@ -48,6 +48,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, handleAuthChange);
     return () => unsubscribe();
   }, [auth]);
+
   const saveCart = async (newCart: CartProduct[]) => {
     const user = auth.currentUser;
     if (user) {

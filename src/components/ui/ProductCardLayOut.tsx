@@ -1,4 +1,4 @@
-import { Product } from '@/lib/utils';
+import { Product } from '@/lib/product';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 

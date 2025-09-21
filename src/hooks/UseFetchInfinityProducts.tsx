@@ -7,7 +7,7 @@ import {
   orderBy,
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
-import { FetchProductsResult } from '@/lib/utils';
+import { FetchProductsResult } from '@/lib/product';
 import { mapDocToProduct } from './productUtill';
 
 const PAGE_SIZE = 10;

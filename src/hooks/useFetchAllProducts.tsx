@@ -1,6 +1,6 @@
 import { getDocs, collection, query, orderBy } from 'firebase/firestore';
 import { db } from '@/config/firebase';
-import { Product } from '@/lib/utils';
+import { Product } from '@/lib/product';
 import { mapDocToProduct } from './productUtill';
 import { useQuery } from 'react-query';
 

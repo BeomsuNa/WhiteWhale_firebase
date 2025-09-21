@@ -7,7 +7,7 @@ import {
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
-import { Product, FetchProductsResult } from '@/lib/utils';
+import { Product, FetchProductsResult } from '@/lib/product';
 
 const fetchProducts = async ({
   pageParam = null,

@@ -3,7 +3,7 @@ import { useFetchInfiniteProducts } from '@/hooks/UseFetchData';
 import MainProductCard from '@/components/ui/MainProductCard';
 import { useInView } from 'react-intersection-observer';
 import { useProductCategory } from '@/components/context/ProductCategoryContext';
-import { ProductCard } from '@/lib/utils';
+import { ProductCard } from '@/lib/product';
 import { useFetchSortedProducts } from '@/hooks/FetchSortedProducts';
 import { v4 as uuidv4 } from 'uuid';
 import Skele from '@/components/ui/Skele';

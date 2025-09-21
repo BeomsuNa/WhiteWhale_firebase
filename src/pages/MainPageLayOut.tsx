@@ -1,5 +1,5 @@
 import MainProductCard from '@/components/ui/MainProductCard';
-import { ProductCard } from '@/lib/utils';
+import { ProductCard } from '@/lib/product';
 import { useFetchProductCardData } from '@/hooks/UseFetchData';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';

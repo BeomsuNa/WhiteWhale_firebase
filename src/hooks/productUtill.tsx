@@ -1,5 +1,5 @@
 import { QueryDocumentSnapshot } from 'firebase/firestore';
-import { Product } from '@/lib/utils';
+import { Product } from '@/lib/product';
 
 /**
  * Firestore 문서를 Product 객체로 변환
