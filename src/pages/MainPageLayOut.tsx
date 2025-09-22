@@ -1,5 +1,5 @@
 import MainProductCard from '@/components/ui/MainProductCard';
-import { ProductCard } from '@/lib/product';
+import { UploadProduct } from '@/lib/product';
 import { useFetchProductCardData } from '@/hooks/UseFetchData';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ import Skeleton from '../components/ui/Skele';
 import { Button } from '@/components/ui/button';
 
 interface CategorizedProducts {
-  [category: string]: ProductCard[];
+  [category: string]: UploadProduct[];
 }
 
 interface MainPageLayOutProps {

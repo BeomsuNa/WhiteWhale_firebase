@@ -7,15 +7,15 @@ import {
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
-import { ProductCard } from '@/lib/product';
+import { UploadProduct } from '@/lib/product';
 
 const fetchSortedProducts = async (
   sortField: string,
-): Promise<ProductCard[]> => {
+): Promise<UploadProduct[]> => {
   const productsCollection = collection(db, 'Product');
   const productsQuery = query(productsCollection, orderBy(sortField));
   const querySnapshot = await getDocs(productsQuery);
-  const products: ProductCard[] = querySnapshot.docs.map(
+  const products: UploadProduct[] = querySnapshot.docs.map(
     (doc: QueryDocumentSnapshot) => {
       const docData = doc.data();
       return {
