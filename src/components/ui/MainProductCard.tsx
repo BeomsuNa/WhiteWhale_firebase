@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ProductCard } from '@/lib/product';
+import { ProductCard, UploadProduct } from '@/lib/product';
 import { Link } from 'react-router-dom';
 import { usePreFetchProduct } from '@/hooks/PreFetch';
 
 interface MainProductCardProps {
-  product: ProductCard;
+  product: UploadProduct;
 }
 
 const MainProductCard: React.FC<MainProductCardProps> = ({ product }) => {

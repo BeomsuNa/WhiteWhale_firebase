@@ -29,9 +29,8 @@ export interface FetchProductsResult {
   nextPage: any;
 }
 
-export interface ProductCard {
+export interface UploadProduct {
   id: string;
-  email: string;
   productCategory: string;
   productName: string;
   productPrice: number;
@@ -40,10 +39,19 @@ export interface ProductCard {
   updatedAt?: Timestamp;
 }
 
-export interface CartProduct extends ProductCard {
-  quantity: number;
-}
-
 export interface postInfo {
   postcodeData: string;
 }
+
+export interface ProductCard extends UploadProduct {
+  email: string; // 파생 정보
+}
+
+export interface CartProduct extends ProductCard {
+  quantity: number;
+}
+// 특정 키를 Optional(선택적)로 바꾸는 유틸리티
+type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+// 특정 키를 Required(필수)로 바꾸는 유틸리티
+type WithRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;

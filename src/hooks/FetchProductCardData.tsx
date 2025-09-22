@@ -9,20 +9,17 @@ import {
   DocumentData,
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
-import { ProductCard } from '@/lib/product';
+import { ProductCard, UploadProduct } from '@/lib/product';
 
-const productCardConverter: FirestoreDataConverter<ProductCard> = {
-  toFirestore(productCard: ProductCard): DocumentData {
-    return { ...productCard };
+const productCardConverter: FirestoreDataConverter<UploadProduct> = {
+  toFirestore(product: ProductCard): DocumentData {
+    return { ...product };
   },
-  fromFirestore(
-    snapshot: QueryDocumentSnapshot,
-    options: SnapshotOptions,
-  ): ProductCard {
+  fromFirestore(snapshot, options): UploadProduct {
     const data = snapshot.data(options)!;
     return {
       id: snapshot.id,
-      updatedAt: data.createdAt,
+      updatedAt: data.updatedAt,
       productName: data.productName,
       productPrice: data.productPrice,
       imageUrl: data.imageUrl,
@@ -34,7 +31,7 @@ const productCardConverter: FirestoreDataConverter<ProductCard> = {
 
 export const fetchProductCardData = async (
   sortOption: string,
-): Promise<ProductCard[]> => {
+): Promise<UploadProduct[]> => {
   let IndexOption;
   if (sortOption === 'date') {
     IndexOption = query(collection(db, 'Product'), orderBy('updateAt', 'desc'));
@@ -48,7 +45,7 @@ export const fetchProductCardData = async (
   }
 
   const querySnapshot = await getDocs(IndexOption);
-  const products: ProductCard[] = querySnapshot.docs.map(
+  const products: UploadProduct[] = querySnapshot.docs.map(
     (doc: QueryDocumentSnapshot) => {
       const docData = doc.data();
       return {

@@ -5,7 +5,6 @@ import fetch from "node-fetch";
 
 admin.initializeApp();
 const db = admin.firestore();
-console.log("현재 DB는?", db);
 
 export const paymentComplete = functions.https.onRequest(async (req, res) => {
   try {
