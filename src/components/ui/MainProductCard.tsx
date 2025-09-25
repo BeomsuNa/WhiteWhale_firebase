@@ -17,7 +17,7 @@ const MainProductCard: React.FC<MainProductCardProps> = ({ product }) => {
 
   return (
     <article
-      className="w-64 h-64 rounded-xl border border-white m-3 hover:bg-customOrange hover:border-black hover:border-2 transition-colors duration-200 group"
+      className="w-64 h-64 rounded-xl border border-white m-3 hover:bg-[#4B4E54] hover:border-black hover:border-2 transition-colors duration-200 group"
       id="cardBorderSection"
     >
       <Link to={`/buy/${product.id}`} state={{ product }}>
@@ -28,7 +28,7 @@ const MainProductCard: React.FC<MainProductCardProps> = ({ product }) => {
           <img
             src={product.imageUrl}
             alt={product.productName}
-            className="w-48 h-36  border border-black border-0.5"
+            className="w-48 h-36  border border-black border-0.5 transition duration-300 group-hover:opacity-50"
           />
 
           <figcaption className="sr-only">{product.productName}</figcaption>
