@@ -18,7 +18,6 @@ interface MainProductCardProps {
   sortOption: string;
   onClose: () => void;
 }
-
 const ProductDetailPage: React.FC<MainProductCardProps> = ({
   sortOption,
   onClose,
@@ -32,7 +31,7 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
   const [orderProductCount, setOrderProductCount] = useState<number>(1);
   const [finishiCart, setFinishiCart] = useState(false);
   const [emblaApi, setEmblaApi] = useState<CarouselApi | null>(null);
-
+  const [sold, setSold] = useState(true);
   const incrementCount = () => {
     setOrderProductCount(prevCount => prevCount + 1);
   };
@@ -126,17 +125,24 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
           </div>
 
           {/* 버튼 영역 */}
+
           <div className="flex gap-3 pt-4">
             {/* <Button className="flex-1 py-3 text-lg bg-green-500 hover:bg-green-600">
               구매하기
             </Button> */}
 
-            <Button
-              className="flex-1 py-3 text-lg bg-blue-600 hover:bg-blue-700"
-              onClick={handleAddToCart}
-            >
-              장바구니담기
-            </Button>
+            {product.productQuantity > 0 ? (
+              <Button
+                className="flex-1 py-3 text-lg bg-blue-600 hover:bg-blue-700"
+                onClick={handleAddToCart}
+              >
+                장바구니담기
+              </Button>
+            ) : (
+              <Button className="bg-gray-400 text-white px-4 py-2 cursor-not-allowed">
+                매진
+              </Button>
+            )}
           </div>
         </div>
       </div>

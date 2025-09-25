@@ -27,7 +27,7 @@ const BuyProductPage = () => {
             channelKey: import.meta.env.VITE_CHANNEL_KEY,
             paymentId: `payment-${crypto.randomUUID()}`,
             orderName: product.productName,
-            totalAmount: product.productPrice * product.quantity + 3000,
+            totalAmount: product.productPrice * product.productQuantity + 3000,
             currency: 'CURRENCY_KRW',
             payMethod: 'CARD',
           })) as PaymentResponse | undefined;
@@ -64,7 +64,7 @@ const BuyProductPage = () => {
   };
 
   const totalAmount = cart.reduce(
-    (total, product) => total + product.productPrice * product.quantity,
+    (total, product) => total + product.productPrice * product.productQuantity,
     0,
   );
   const shippingFee = 3000;
@@ -191,18 +191,24 @@ const BuyProductPage = () => {
                     <Button
                       className="w-8 h-8 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
                       onClick={() =>
-                        handleQuantityChange(product.id, product.quantity - 1)
+                        handleQuantityChange(
+                          product.id,
+                          product.productQuantity - 1,
+                        )
                       }
                     >
                       -
                     </Button>
                     <div className="text-lg font-medium w-6 text-center">
-                      {product.quantity}
+                      {product.productQuantity}
                     </div>
                     <Button
                       className="w-8 h-8 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
                       onClick={() =>
-                        handleQuantityChange(product.id, product.quantity + 1)
+                        handleQuantityChange(
+                          product.id,
+                          product.productQuantity + 1,
+                        )
                       }
                     >
                       +

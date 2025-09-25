@@ -20,51 +20,7 @@ const AllProductPage: React.FC = () => {
   });
   const [sortOption, setSortOption] = useState('productPrice');
   const [sortedProducts, setSortedProducts] = useState<ProductCard[]>([]);
-
   const lastFetchedPage = useRef<number>(0);
-  // useEffect(() => {
-  //   if (inView && hasNextPage && !isFetchingNextPage) {
-  //     fetchNextPage();
-  //     const nextPage = data?.pages?.length ?? 0;
-  //     if (lastFetchedPage.current < nextPage) {
-  //       fetchNextPage();
-  //       lastFetchedPage.current = nextPage;
-  //     }
-  //   }
-  // }, [inView, hasNextPage, isFetchingNextPage]);
-
-  // useEffect(() => {
-  //   if (data) {
-  //     const allProducts = data.pages.flatMap(page => page.products);
-  //     const filteredProducts = category
-  //       ? allProducts.filter(product => product.productCategory === category)
-  //       : allProducts;
-  //     const sortedArray = [...filteredProducts];
-  //     if (sortOption === 'updatedAt') {
-  //       sortedArray.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
-  //     } else if (sortOption === 'productPrice') {
-  //       sortedArray.sort((a, b) => b.productPrice - a.productPrice);
-  //     }
-
-  //     setSortedProducts(sortedArray);
-  //   }
-  // }, [sortOption, data, category]);
-
-  // useEffect(() => {
-  //   if (data) {
-  //     performance.mark('first-product-rendered');
-
-  //     performance.measure(
-  //       'TTFP', // Time To First Product
-  //       'navigationStart',
-  //       'first-product-rendered',
-  //     );
-
-  //     const ttfp = performance.getEntriesByName('TTFP')[0].duration;
-
-  //     console.log('TTFP (첫 상품 렌더링까지 걸린 시간):', ttfp, 'ms');
-  //   }
-  // }, [data]);
 
   const handleSortByPrice = () => {
     setSortOption('productPrice');

@@ -11,24 +11,6 @@ export interface User {
   isSeller: boolean;
 }
 
-export interface Product {
-  createdAt: Timestamp;
-  id: string;
-  productCategory: string;
-  productDescription: string;
-  productName: string;
-  productPrice: number;
-  productQuantity: number;
-  sellerId: number;
-  updatedAt: Timestamp;
-  imageUrl: string;
-}
-
-export interface FetchProductsResult {
-  products: Product[];
-  nextPage: any;
-}
-
 export interface UploadProduct {
   id: string;
   productCategory: string;
@@ -39,6 +21,17 @@ export interface UploadProduct {
   updatedAt?: Timestamp;
 }
 
+export interface Product extends UploadProduct {
+  createdAt: Timestamp;
+  productDescription: string;
+  sellerId: number;
+}
+
+export interface FetchProductsResult {
+  products: Product[];
+  nextPage: any;
+}
+
 export interface postInfo {
   postcodeData: string;
 }
@@ -47,9 +40,10 @@ export interface ProductCard extends UploadProduct {
   email: string; // 파생 정보
 }
 
-export interface CartProduct extends ProductCard {
-  quantity: number;
+export interface CartProduct extends Omit<UploadProduct, 'productQuantity'> {
+  productQuantity: number;
 }
+
 // 특정 키를 Optional(선택적)로 바꾸는 유틸리티
 type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 

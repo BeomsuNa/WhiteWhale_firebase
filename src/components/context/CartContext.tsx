@@ -1,111 +1,102 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  useContext,
-  ReactNode,
-} from 'react';
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { CartProduct } from '@/lib/product';
 import { db } from '@/config/firebase';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-interface CartContextType {
-  cart: CartProduct[];
-  addToCart: (product: CartProduct & { quantity: number }) => void;
-  removeFromCart: (productId: string) => void;
-  updateCartQuantity: (productId: string, quantity: number) => void;
-  clearCart: () => void;
-}
+// 장바구니 불러오기
+export const fetchCart = async (): Promise<CartProduct[]> => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) return [];
+  const cartRef = doc(db, 'Carts', user.uid);
+  const cartDoc = await getDoc(cartRef);
+  if (!cartDoc.exists()) return [];
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
-
-export const useCart = () => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
-  }
-  return context;
+  const rawCart = cartDoc.data().cart || [];
+  return rawCart.map((item: any) => ({
+    id: item.id, // Firestore에 저장한 id 필드
+    productName: item.productName,
+    productPrice: item.productPrice,
+    productCategory: item.productCategory,
+    imageUrl: item.imageUrl,
+    productQuantity: item.productQuantity,
+  })) as CartProduct[];
 };
 
-export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<CartProduct[]>([]);
+// 장바구니 업데이트
+export const updateCart = async (cart: CartProduct[]) => {
   const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) throw new Error('로그인이 필요합니다');
 
-  // 계정 상태가 변경되었을 때 계정이 있으면 해당 데이터, 없으면 cart상태를 빈배열로 변경
-  useEffect(() => {
-    const handleAuthChange = async (user: User | null) => {
-      if (user) {
-        const cartRef = doc(db, 'Carts', user.uid);
-        const cartDoc = await getDoc(cartRef);
-        if (cartDoc.exists()) {
-          setCart(cartDoc.data().cart || []);
-        }
-      } else {
-        setCart([]);
-      }
-    };
-    const unsubscribe = onAuthStateChanged(auth, handleAuthChange);
-    return () => unsubscribe();
-  }, [auth]);
+  const cartRef = doc(db, 'Carts', user.uid);
+  await setDoc(cartRef, cart);
+};
 
-  const saveCart = async (newCart: CartProduct[]) => {
-    const user = auth.currentUser;
-    if (user) {
-      const cartRef = doc(db, 'Carts', user.uid);
-      await setDoc(cartRef, { cart: newCart });
-    } else {
-      localStorage.setItem('cart', JSON.stringify(newCart));
+export const useCart = () => {
+  const queryClient = useQueryClient();
+
+  const { data: cart = [], isLoading } = useQuery({
+    queryKey: ['cart'],
+    queryFn: fetchCart,
+    staleTime: 1000 * 60,
+  });
+
+  const mutation = useMutation({
+    mutationFn: (newCart: CartProduct[]) => updateCart(newCart),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['cart']);
+    },
+  });
+
+  const addToCart = (product: CartProduct, quantity: number = 1) => {
+    // 재고가 0이면 매진 처리
+    if (product.productPrice <= 0) {
+      alert('매진된 상품입니다.');
+      return;
     }
-    setCart(newCart);
-  };
 
-  const addToCart = (product: CartProduct) => {
-    setCart(prevCart => {
-      const existingProductIndex = prevCart.findIndex(
-        item => item.id === product.id,
+    const existing = cart.find(p => p.id === product.id);
+    let newCart;
+    if (existing) {
+      newCart = cart.map(p =>
+        p.id === product.id
+          ? { ...p, quantity: p.productQuantity + quantity }
+          : p,
       );
-      let updatedCart;
-      if (existingProductIndex !== -1) {
-        updatedCart = [...prevCart];
-        updatedCart[existingProductIndex].quantity += product.quantity;
-      } else {
-        updatedCart = [...prevCart, product];
-      }
-      const user = auth.currentUser;
-      if (user) {
-        const cartRef = doc(db, 'Carts', user.uid);
-        setDoc(cartRef, { cart: updatedCart });
-      } else {
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
-      }
+    } else {
+      newCart = [...cart, { ...product, quantity }];
+    }
 
-      return updatedCart;
-    });
+    mutation.mutate(newCart);
   };
 
+  // 상품 제거
   const removeFromCart = (productId: string) => {
-    const updatedCart = cart.filter(item => item.id !== productId);
-    saveCart(updatedCart);
+    const newCart = cart.filter(p => p.id !== productId);
+    mutation.mutate(newCart);
   };
 
+  // 수량 변경
   const updateCartQuantity = (productId: string, quantity: number) => {
-    const updatedCart = cart.map(item =>
-      item.id === productId ? { ...item, quantity } : item,
+    const newCart = cart.map(p =>
+      p.id === productId ? { ...p, quantity } : p,
     );
-    saveCart(updatedCart);
+    mutation.mutate(newCart);
   };
 
+  // 장바구니 비우기
   const clearCart = () => {
-    saveCart([]);
-    localStorage.removeItem('cart');
+    mutation.mutate([]);
   };
 
-  return (
-    <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, updateCartQuantity, clearCart }}
-    >
-      {children}
-    </CartContext.Provider>
-  );
+  return {
+    cart,
+    isLoading,
+    addToCart,
+    removeFromCart,
+    updateCartQuantity,
+    clearCart,
+  };
 };

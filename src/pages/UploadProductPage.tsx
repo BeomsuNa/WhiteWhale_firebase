@@ -8,7 +8,7 @@ import {
 } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import UseImageUpload from '@/hooks/UseImageUpload';
+import UseImageUpload from '@/Order/UseImageUpload';
 
 const ProductForm = () => {
   const [productName, setProductName] = useState('');
