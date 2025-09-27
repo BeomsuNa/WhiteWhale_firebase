@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useState, useEffect, useRef } from 'react';
-import { useQueryClient } from 'react-query';
 
 declare global {
   interface Window {
@@ -70,11 +70,14 @@ const Geocoder: React.FC = () => {
         setPostAddress(data.zonecode);
         setMainAddress(data.address);
 
-        queryClient.setQueriesData('addressData', {
-          zonecode: data.zonecode,
-          address: data.address,
-          detailAddress: detailAddressRef.current?.value || '',
-        });
+        queryClient.setQueriesData(
+          { queryKey: ['addressData'] },
+          {
+            zonecode: data.zonecode,
+            address: data.address,
+            detailAddress: detailAddressRef.current?.value || '',
+          },
+        );
         if (detailAddressRef.current) {
           detailAddressRef.current.focus();
         }

@@ -1,4 +1,3 @@
-import { useQuery } from 'react-query';
 import {
   collection,
   getDocs,
@@ -8,6 +7,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
 import { UploadProduct } from '@/lib/product';
+import { useQuery } from '@tanstack/react-query';
 
 const fetchSortedProducts = async (
   sortField: string,
@@ -33,7 +33,8 @@ const fetchSortedProducts = async (
 };
 
 export const useFetchSortedProducts = (sortField: string) => {
-  return useQuery(['sortedProducts', sortField], () =>
-    fetchSortedProducts(sortField),
-  );
+  return useQuery({
+    queryKey: ['sortedProducts', sortField],
+    queryFn: () => fetchSortedProducts(sortField),
+  });
 };

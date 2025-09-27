@@ -1,14 +1,18 @@
 import React from 'react';
-import { useQueryClient } from 'react-query';
-import FetchProducts from './UseFetchInfinityProducts';
+
+import { useProducts } from './UseFetchInfinityProducts';
 import { Alert } from '@/components/ui/alert';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const usePreFetchProduct = () => {
   const queryClient = useQueryClient();
 
   const preFetchData = async () => {
     try {
-      await queryClient.prefetchQuery('products', FetchProducts);
+      await queryClient.prefetchQuery({
+        queryKey: ['products'],
+        queryFn: useProducts,
+      });
     } catch (error) {
       throw new Error('에러 발생');
     }

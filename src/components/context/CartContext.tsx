@@ -2,7 +2,7 @@ import { getAuth } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { CartProduct } from '@/lib/product';
 import { db } from '@/config/firebase';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // 장바구니 불러오기
 export const fetchCart = async (): Promise<CartProduct[]> => {
@@ -46,7 +46,7 @@ export const useCart = () => {
   const mutation = useMutation({
     mutationFn: (newCart: CartProduct[]) => updateCart(newCart),
     onSuccess: () => {
-      queryClient.invalidateQueries(['cart']);
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
 

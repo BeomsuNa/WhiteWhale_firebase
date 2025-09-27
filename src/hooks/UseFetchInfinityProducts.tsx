@@ -9,14 +9,16 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
 import { FetchProductsResult, Product } from '@/lib/product';
-import { useInfiniteQuery } from 'react-query';
+import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
+
+type PageCursor = QueryDocumentSnapshot | null;
 
 const PAGE_SIZE = 10;
 
 function mapDocToProduct(doc: QueryDocumentSnapshot): Product {
   const docData = doc.data();
   return {
-    id: docData.id,
+    id: doc.id,
     createdAt: docData.createdAt,
     productCategory: docData.productCategory,
     productDescription: docData.productDescription,
@@ -30,7 +32,9 @@ function mapDocToProduct(doc: QueryDocumentSnapshot): Product {
 }
 
 const FetchProducts = async ({
-  pageParam = null,
+  pageParam,
+}: {
+  pageParam: PageCursor;
 }): Promise<FetchProductsResult> => {
   const productsQuery = query(
     collection(db, 'Product'),
@@ -51,13 +55,20 @@ const FetchProducts = async ({
 export default FetchProducts;
 
 export const useProducts = () => {
-  return useInfiniteQuery({
+  return useInfiniteQuery<
+    FetchProductsResult,
+    Error,
+    InfiniteData<FetchProductsResult>,
+    ['products'],
+    PageCursor
+  >({
     queryKey: ['products'],
-    queryFn: FetchProducts,
-    getNextPageParam: lastPage => lastPage.nextPage ?? undefined,
+    queryFn: ({ pageParam }) => FetchProducts({ pageParam }),
+    initialPageParam: null,
+    getNextPageParam: lastPage => lastPage.nextPage ?? null,
 
     // ✅ staleTime 적용
     staleTime: 1000 * 60 * 3, // 3분 동안 캐시된 데이터는 신선(fresh)으로 간주
-    cacheTime: 1000 * 60 * 10, // 10분 후 캐시 제거 (옵션)
+    gcTime: 1000 * 60 * 10, // 10분 후 캐시 제거 (옵션)
   });
 };

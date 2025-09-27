@@ -11,8 +11,10 @@ import {
   signInWithEmailAndPassword,
   User as FirebaseUser,
 } from 'firebase/auth';
-import { useQuery, useQueryClient } from 'react-query';
+
 import fetchUser from '@/hooks/FetchUser';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { query } from 'firebase/firestore';
 
 export interface User {
   uid: string;
@@ -43,10 +45,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, user => {
       if (user) {
         setFirebaseUser(user);
-        queryClient.setQueryData('user', user);
+        queryClient.setQueryData(['user', user.uid], user);
       } else {
         setFirebaseUser(null);
-        queryClient.setQueryData('user', null);
+        queryClient.setQueryData(['user'], null);
       }
     });
     return () => unsubscribe();
@@ -54,12 +56,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
-    queryClient.invalidateQueries('user');
+    queryClient.invalidateQueries({ queryKey: ['user'] });
   };
 
   const logout = async () => {
     await auth.signOut();
-    queryClient.invalidateQueries('user');
+    queryClient.invalidateQueries({ queryKey: ['user'] });
   };
 
   return (
@@ -90,11 +92,10 @@ export const useAuth = () => {
     data: user,
     isLoading: userLoading,
     error,
-  } = useQuery(
-    ['userData', firebaseUser?.uid],
-    () => fetchUser(firebaseUser as FirebaseUser), // firebaseUser 객체를 인수로 전달
-    { enabled: !!firebaseUser },
-  );
+  } = useQuery({
+    queryKey: ['userData', firebaseUser?.uid],
+    queryFn: () => fetchUser(firebaseUser as FirebaseUser),
+  });
 
   return {
     isLoggedIn: !!firebaseUser,

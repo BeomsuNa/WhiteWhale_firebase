@@ -1,5 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
-import { Timestamp } from 'firebase/firestore';
+import { QueryDocumentSnapshot, Timestamp } from 'firebase/firestore';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -29,7 +29,7 @@ export interface Product extends UploadProduct {
 
 export interface FetchProductsResult {
   products: Product[];
-  nextPage: any;
+  nextPage: QueryDocumentSnapshot | null;
 }
 
 export interface postInfo {

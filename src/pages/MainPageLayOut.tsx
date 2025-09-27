@@ -71,6 +71,7 @@ const MainPageLayOut: React.FC<MainPageLayOutProps> = ({ sortOption }) => {
 
           {/* 카테고리별 섹션 (스켈레톤) */}
           {[...Array(2)].map((_, i) => (
+            // eslint-disable-next-line react/no-array-index-key
             <div key={i} className="category-section mb-12">
               {/* 카테고리 타이틀 */}
               <div className="flex items-center justify-between mb-4">

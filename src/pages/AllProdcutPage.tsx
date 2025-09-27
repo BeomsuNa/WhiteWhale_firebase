@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useFetchInfiniteProducts } from '@/hooks/UseFetchData';
 import MainProductCard from '@/components/ui/MainProductCard';
 import { useInView } from 'react-intersection-observer';
 import { useProductCategory } from '@/components/context/ProductCategoryContext';
@@ -11,8 +10,6 @@ import { useFetchAllProducts } from '@/hooks/useFetchAllProducts';
 
 const AllProductPage: React.FC = () => {
   const { category, setCategory } = useProductCategory();
-  // const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-  //   useFetchInfiniteProducts();
   const { data, isLoading, error } = useFetchAllProducts();
   const { ref, inView } = useInView({
     threshold: 0.5,

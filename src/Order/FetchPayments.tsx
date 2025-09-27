@@ -1,7 +1,7 @@
 import { db } from '@/config/firebase';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getAuth } from 'firebase/auth';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { useQuery, UseQueryResult } from 'react-query';
 
 interface Payment {
   productImg: string;
@@ -35,5 +35,8 @@ const fetchUserPayments = async () => {
 export const usePayments = (
   userId: string,
 ): UseQueryResult<Payment[], unknown> => {
-  return useQuery(['paymetnrs', userId], () => FetchPayments(userId));
+  return useQuery({
+    queryKey: ['paymetnrs', userId],
+    queryFn: () => FetchPayments(userId),
+  });
 };

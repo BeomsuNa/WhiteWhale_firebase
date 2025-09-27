@@ -2,8 +2,8 @@ import { useAuth } from '@/components/context/AuthContext';
 import OrderForm from '@/components/ui/OrderForm';
 import { db } from '@/config/firebase';
 import { usePayments } from '@/Order/FetchPayments';
+import { Mutation, useMutation, useQueryClient } from '@tanstack/react-query';
 import { doc, updateDoc } from 'firebase/firestore';
-import { useMutation, useQueryClient } from 'react-query';
 
 interface Payment {
   id: string;
@@ -15,18 +15,16 @@ interface Payment {
 
 const useCancelOrder = () => {
   const queryClient = useQueryClient();
-  return useMutation(
-    async ({ orderId }: { orderId: string; totalAmount: number }) => {
+  return useMutation<void, Error, { orderId: string; totalAmount: number }>({
+    mutationFn: async ({ orderId }) => {
       const paymentRef = doc(db, 'purchases', orderId);
       await updateDoc(paymentRef, { payState: false });
       // 실제 결제 서비스에서 환불 처리를 해야 합니다.
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('payments');
-      },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] });
     },
-  );
+  });
 };
 
 const OrderStatus = () => {

@@ -2,7 +2,7 @@ import * as PortOne from '@portone/browser-sdk/v2';
 import { useCart } from '@/components/context/CartContext';
 import { Button } from '@/components/ui/button';
 import Geocoder from '@/Order/Geocoder';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getAuth } from 'firebase/auth';
 import { PaymentResponse } from '@/lib/payments';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ const BuyProductPage = () => {
   const navigate = useNavigate();
   const { cart, updateCartQuantity, clearCart } = useCart();
 
-  const { data: addressData } = useQuery('addressData');
+  const { data: addressData } = useQuery({ queryKey: ['addressData'] });
 
   const handleQuantityChange = (productId: string, quantity: number) => {
     if (quantity < 1) return;

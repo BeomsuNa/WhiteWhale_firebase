@@ -1,16 +1,11 @@
-import { useQuery, useInfiniteQuery } from 'react-query';
 import FetchProducts from './UseFetchInfinityProducts';
-import { FetchProductsResult, ProductCard, UploadProduct } from '@/lib/product';
+import { UploadProduct } from '@/lib/product';
 import { fetchProductCardData } from './FetchProductCardData';
-
-export const useFetchInfiniteProducts = () => {
-  return useInfiniteQuery<FetchProductsResult>('products', FetchProducts, {
-    getNextPageParam: lastPage => lastPage.nextPage || undefined,
-  });
-};
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 export const useFetchProductCardData = (sortOption: string) => {
-  return useQuery<UploadProduct[]>(['productCardData', sortOption], () =>
-    fetchProductCardData(sortOption),
-  );
+  return useQuery<UploadProduct[]>({
+    queryKey: ['productCardData', sortOption],
+    queryFn: () => fetchProductCardData(sortOption),
+  });
 };
