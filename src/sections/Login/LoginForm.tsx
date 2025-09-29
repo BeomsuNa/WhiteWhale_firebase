@@ -26,10 +26,10 @@ const LoginForm: React.FC<LoginFormProps> = () => {
     }
   };
   return (
-    <article className="flex justify-center m-12 h-ull">
+    <article className="flex justify-center m-12  min-h-screen min-w-[2000px]">
       <form
         onSubmit={handleLogin}
-        className="w-1/3 h-128 pl-8 pr-8 pt-8 shadow-md bg-gray-300"
+        className="w-full max-w-md max-h-svh pl-8 pr-8 pt-8 shadow-md bg-gray-300"
       >
         <header className="mb-10 text-lg font-bold"> Login</header>
         <fieldset className="mb-4">

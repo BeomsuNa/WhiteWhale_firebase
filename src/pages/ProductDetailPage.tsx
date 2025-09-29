@@ -20,14 +20,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@radix-ui/react-select';
+} from '@/components/ui/select';
 
 interface MainProductCardProps {
   sortOption: string;
   onClose: () => void;
 }
 type OptionType = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   quantity: number;
@@ -48,7 +48,7 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
   const [finishiCart, setFinishiCart] = useState(false);
   const [emblaApi, setEmblaApi] = useState<CarouselApi | null>(null);
   const [sold, setSold] = useState(true);
-  const updateQuantity = (id: number, delta: number) => {
+  const updateQuantity = (id: string, delta: number) => {
     setSelectedOption(prev =>
       prev.map(opt =>
         opt.id === id
@@ -74,17 +74,24 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
       sameproduct.id !== currentProduct.id,
   );
 
-  const handleAddOption = () => {
+  const handleAddOption = (val: string) => {
     const newOption: OptionType = {
-      id: Date.now(),
-      name: '크라이톡스105 오일(5g)',
-      price: 8500,
+      id: new Date().getTime().toString(),
+      name: product.productName,
+      price: product.productPrice,
       quantity: 1,
     };
-    setSelectedOption(prev => [...prev, newOption]);
+
+    setSelectedOption(prev => {
+      if (prev.some(opt => opt.name === newOption.name)) {
+        alert('이미 선택되었습니다.');
+        return prev;
+      }
+      return [...prev, newOption];
+    });
   };
 
-  const handleRemoveOption = (id: number) => {
+  const handleRemoveOption = (id: string) => {
     setSelectedOption(prev => prev.filter(opt => opt.id !== id));
   };
 
@@ -106,82 +113,90 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
             <img
               src={product.imageUrl}
               alt={product.productName}
-              className="w-full h-full object-cover"
+              className="w-240 h-240 object-cover"
             />
             <figcaption className="sr-only">{product.productName}</figcaption>
           </figure>
         </div>
-        <div className="mt-12 flex flex-col justify-between" id="infoSection">
+        <div
+          className="mt-12 flex flex-col justify-between min-w-[300px]"
+          id="infoSection"
+        >
           {/* 상품명 */}
-          <h1 className="text-2xl font-bold w-full max-w-xl min-h-[200px] text-gray-900">
+
+          <h1 className="self-start text-left text-2xl font-bold w-full max-w-xl min-h-[200px] text-gray-900">
             {product.productName}
           </h1>
+
           <div className="space-y-4">
             <div className="flex flex-col justify-center items-start gap-4">
               <Label className="text-xl font-semibold">
                 {product.productName}
               </Label>
-              <Select onValueChange={val => console.log(val)}>
+              <Select onValueChange={val => handleAddOption(val)}>
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue
-                    placeholder={`${product.productCategory} 필수!!`}
-                  />
+                  <SelectValue placeholder="물건선택 필수!!" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
+                  <SelectItem value="물건선택필수!" id="1">
+                    물건선택 필수
+                  </SelectItem>
+                  <SelectItem id="2" value={`${product.productName}`}>
+                    {`${product.productName}`}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             {/* 선택된 옵션 박스들 */}
-            {selectedOption.map(option => (
-              <div
-                key={option.id}
-                className="relative border rounded-md p-4 bg-gray-50"
-              >
-                {/* 삭제 버튼 */}
-                <Button
-                  onClick={() => handleRemoveOption(option.id)}
-                  className="absolute top-2 right-2 text-gray-400 hover:text-black"
+            {selectedOption.map(option =>
+              !option.name ? null : (
+                <div
+                  key={option.id}
+                  className="flex flex-col border rounded-md p-4 w-full bg-gray-50"
                 >
-                  x
-                </Button>
-
-                {/* 옵션명 */}
-                <div className="text-sm font-medium max-w-sm min-h-[400px] text-gray-700 mb-3">
-                  {option.name}
-                </div>
-
-                {/* 수량 & 가격 */}
-                <div className="flex items-center justify-between">
-                  {/* 수량 컨트롤 */}
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      onClick={() => updateQuantity(option.id, -1)}
-                      className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 bg-gray-50 text-lg font-bold hover:bg-gray-100"
+                  {/* 옵션명 */}
+                  <div className=" flex justify-between items-center text-sm font-medium max-w-sm text-gray-700 mb-3">
+                    {option.name}
+                    {/* 삭제 버튼 */}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveOption(option.id)}
+                      className="flex items-center justify-center w-8 h-8 rounded-full border border-gray-300 text-gray-400 hover:text-black leading-none"
                     >
-                      −
-                    </Button>
-                    <span className="text-lg font-semibold">
-                      {option.quantity}
-                    </span>
-                    <Button
-                      onClick={() => updateQuantity(option.id, 1)}
-                      className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 bg-gray-50 text-lg font-bold hover:bg-gray-100"
-                    >
-                      +
-                    </Button>
+                      x
+                    </button>
                   </div>
 
-                  {/* 가격 */}
-                  <div className="text-sm font-semibold">
-                    {(option.price * option.quantity).toLocaleString()}원
+                  {/* 수량 & 가격 */}
+                  <div className="flex items-center justify-between">
+                    {/* 수량 컨트롤 */}
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        onClick={() => updateQuantity(option.id, -1)}
+                        className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 bg-gray-50 text-lg font-bold hover:bg-gray-100"
+                      >
+                        −
+                      </Button>
+                      <span className="text-lg font-semibold">
+                        {option.quantity}
+                      </span>
+                      <Button
+                        onClick={() => updateQuantity(option.id, 1)}
+                        className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 bg-gray-50 text-lg font-bold hover:bg-gray-100"
+                      >
+                        +
+                      </Button>
+                    </div>
+
+                    {/* 가격 */}
+                    <div className="text-sm font-semibold">
+                      {(option.price * option.quantity).toLocaleString()}원
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ),
+            )}
           </div>
 
           {/* 가격 정보 */}
@@ -199,7 +214,6 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
           </div>
 
           {/* 버튼 영역 */}
-
           <div className="flex gap-3 pt-4">
             {/* <Button className="flex-1 py-3 text-lg bg-green-500 hover:bg-green-600">
               구매하기
@@ -213,7 +227,7 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
                 장바구니담기
               </Button>
             ) : (
-              <Button className="bg-gray-400 text-white px-4 py-2 cursor-not-allowed">
+              <Button className="w-full bg-gray-400 text-white px-4 py-2 cursor-not-allowed">
                 매진
               </Button>
             )}
