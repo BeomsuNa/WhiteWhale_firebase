@@ -34,6 +34,19 @@ const ProductForm = () => {
         alert('이미지를 선택해주세요.');
         return;
       }
+      if (!productPrice) {
+        alert('가격을 입력해주세요.');
+        return;
+      }
+      if (!productQuantity) {
+        alert('수량을 입력하세요');
+        return;
+      }
+
+      if (!productCategory) {
+        alert('카테고리를 선택해주세요.');
+        return;
+      }
 
       // 이미지 업로드 및 최적화
       const folderPath = 'Product';
@@ -67,9 +80,9 @@ const ProductForm = () => {
   };
 
   return (
-    <section className="bg-white dark:bg-gray-900 flex justify-center items-center min-h-screen">
+    <section className="bg-white dark:bg-gray-900 flex justify-center items-center min-h-screen border rounded-lg">
       <div className="flex flex-col items-center w-full max-w-4xl p-4 overflow-y-auto max-h-screen">
-        <div className="w-full mb-4">
+        <div className="w-full ">
           <label
             htmlFor="productImage"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -82,7 +95,16 @@ const ProductForm = () => {
             onChange={handleImageChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
           />
-          {image && <p className="mt-2 text-sm text-gray-500">{image.name}</p>}
+          {image && (
+            <div className="flex flex-col items-center mt-4">
+              <img
+                src={URL.createObjectURL(image)}
+                alt={image.name}
+                className="w-64 h-64 border object-cover rounded-md"
+              />
+              <p className="mt-2 text-sm text-gray-500">{image.name}</p>
+            </div>
+          )}
         </div>
         <div className="w-full py-8 px-4 max-w-3xl lg:py-16">
           <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">

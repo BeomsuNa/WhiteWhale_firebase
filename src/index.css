@@ -84,12 +84,9 @@
 @layer base {
   * {
     @apply border-border
-    /* font-family: "Noto Sans KR", sans-serif; */
+    /* font-family: "Noto Sans KR", sans-serif; */;
   }
   body {
     @apply bg-background text-foreground;
   }
 }
-
-
-
