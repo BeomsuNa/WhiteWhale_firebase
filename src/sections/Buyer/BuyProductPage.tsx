@@ -2,15 +2,24 @@ import * as PortOne from '@portone/browser-sdk/v2';
 import { useCart } from '@/components/context/CartContext';
 import { Button } from '@/components/ui/button';
 import Geocoder from '@/Order/Geocoder';
-import { useQuery } from '@tanstack/react-query';
-import { getAuth } from 'firebase/auth';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { User } from '@/components/context/AuthContext';
 import { PaymentResponse } from '@/lib/payments';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import {
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
+import { db } from '@/config/firebase';
 
 const BuyProductPage = () => {
+  const { data: user } = useQuery<User>({ queryKey: ['user'] });
   const navigate = useNavigate();
   const { cart, updateCartQuantity, clearCart } = useCart();
-
+  const queryClient = useQueryClient();
   const { data: addressData } = useQuery({ queryKey: ['addressData'] });
 
   const handleQuantityChange = (productId: string, quantity: number) => {
@@ -18,8 +27,9 @@ const BuyProductPage = () => {
     updateCartQuantity(productId, quantity);
   };
 
-  const reqPayment = async () => {
+  const handlePayment = async () => {
     try {
+      // 1️⃣ PortOne 결제 요청 (cart의 각 상품에 대해 병렬 요청)
       const paymentResponses = await Promise.all(
         cart.map(async product => {
           const response = (await PortOne.requestPayment({
@@ -27,7 +37,7 @@ const BuyProductPage = () => {
             channelKey: import.meta.env.VITE_CHANNEL_KEY,
             paymentId: `payment-${crypto.randomUUID()}`,
             orderName: product.productName,
-            totalAmount: product.productPrice * product.productQuantity + 3000,
+            totalAmount: product.productPrice * product.quantity + 3000,
             currency: 'CURRENCY_KRW',
             payMethod: 'CARD',
           })) as PaymentResponse | undefined;
@@ -35,36 +45,59 @@ const BuyProductPage = () => {
           if (response?.code != null) {
             throw new Error(response.message);
           }
-          // const user = auth.currentUser;
 
-          // if (user) {
-          //   await addDoc(collection(db, 'purchases'), {
-          //     uid: user?.uid,
-          //     paymentId: response?.paymentId,
-          //     productId: product.id,
-          //     productName: product.productName,
-          //     totalAmount: product.productPrice * product.quantity,
-          //     currency: 'CURRENCY_KRW',
-          //     payMethod: 'CARD',
-          //     createdAt: new Date(),
-          //     buyeraddress: addressData || {},
-          //     payState: true,
-          //     productImg: product.imageUrl,
-          //   });
-          // }
+          // 결제 성공 시 Firestore에 주문 데이터 저장
+          const orderId = `order-${crypto.randomUUID()}`;
+          const orderRef = doc(collection(db, 'Orders'), orderId);
+
+          await setDoc(orderRef, {
+            orderId,
+            userId: user!.uid ?? 'guest',
+            productId: product.id,
+            productName: product.productName,
+            productPrice: product.productPrice,
+            orderQuantity: product.quantity,
+            address: addressData || '미지정',
+            payMethod: 'CARD',
+            payState: 'paid',
+            createdAt: serverTimestamp(),
+          });
+
+          // 재고(productQuantity) 업데이트
+          const productRef = doc(db, 'Product', product.id);
+          await updateDoc(productRef, {
+            productQuantity: Math.max(
+              product.productQuantity! - product.quantity,
+              0,
+            ),
+          });
+
           return response;
         }),
       );
-      alert('결제가 완료되었습니다.');
+
+      // 2️⃣ React Query 수동 무효화 (상품, 장바구니, 구매목록 등)
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['cart'] }),
+        queryClient.invalidateQueries({ queryKey: ['products'] }),
+        queryClient.invalidateQueries({ queryKey: ['productCardData'] }),
+        queryClient.invalidateQueries({ queryKey: ['orders'] }),
+      ]);
+
+      // 3️⃣ 장바구니 비우기
       clearCart();
-      navigate('/');
-    } catch (error) {
-      alert(error);
+
+      // 4️⃣ 사용자 안내 및 페이지 이동
+      alert('결제가 완료되었습니다.');
+      navigate('/mypage/orders'); // 주문 내역 페이지로 이동
+    } catch (error: any) {
+      console.error('결제 실패:', error);
+      alert(error.message || '결제 중 오류가 발생했습니다.');
     }
   };
 
   const totalAmount = cart.reduce(
-    (total, product) => total + product.productPrice * product.productQuantity,
+    (total, product) => total + product.productPrice * product.quantity,
     0,
   );
   const shippingFee = 3000;
@@ -191,10 +224,7 @@ const BuyProductPage = () => {
                     <Button
                       className="w-8 h-8 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
                       onClick={() =>
-                        handleQuantityChange(
-                          product.id,
-                          product.productQuantity - 1,
-                        )
+                        handleQuantityChange(product.id, product.quantity - 1)
                       }
                     >
                       -
@@ -205,10 +235,7 @@ const BuyProductPage = () => {
                     <Button
                       className="w-8 h-8 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
                       onClick={() =>
-                        handleQuantityChange(
-                          product.id,
-                          product.productQuantity + 1,
-                        )
+                        handleQuantityChange(product.id, product.quantity + 1)
                       }
                     >
                       +
@@ -248,7 +275,7 @@ const BuyProductPage = () => {
             </div>
           </div>
           <Button
-            onClick={reqPayment}
+            onClick={handlePayment}
             className="w-full mt-8 py-3 rounded-lg text-white font-bold text-lg bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-lg"
           >
             결제하기 (Pay Now)

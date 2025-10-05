@@ -63,6 +63,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await auth.signOut();
     queryClient.invalidateQueries({ queryKey: ['user'] });
   };
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => firebaseUser,
+    enabled: !!firebaseUser,
+  });
 
   return (
     <AuthContext.Provider

@@ -155,10 +155,9 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
                   key={option.id}
                   className="flex flex-col border rounded-md p-4 w-full bg-gray-50"
                 >
-                  {/* 옵션명 */}
                   <div className=" flex justify-between items-center text-sm font-medium max-w-sm text-gray-700 mb-3">
                     {option.name}
-                    {/* 삭제 버튼 */}
+
                     <button
                       type="button"
                       onClick={() => handleRemoveOption(option.id)}
@@ -168,9 +167,7 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
                     </button>
                   </div>
 
-                  {/* 수량 & 가격 */}
                   <div className="flex items-center justify-between">
-                    {/* 수량 컨트롤 */}
                     <div className="flex items-center space-x-2">
                       <Button
                         onClick={() => updateQuantity(option.id, -1)}
@@ -215,10 +212,6 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
 
           {/* 버튼 영역 */}
           <div className="flex gap-3 pt-4">
-            {/* <Button className="flex-1 py-3 text-lg bg-green-500 hover:bg-green-600">
-              구매하기
-            </Button> */}
-
             {product.productQuantity > 0 ? (
               <Button
                 className="flex-1 py-3 text-lg bg-blue-600 hover:bg-blue-700"

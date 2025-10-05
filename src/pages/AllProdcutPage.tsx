@@ -7,17 +7,25 @@ import { useFetchSortedProducts } from '@/hooks/FetchSortedProducts';
 import { v4 as uuidv4 } from 'uuid';
 import Skele from '@/components/ui/Skele';
 import { useFetchAllProducts } from '@/hooks/useFetchAllProducts';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useProducts } from '@/hooks/UseFetchInfinityProducts';
 
 const AllProductPage: React.FC = () => {
   const { category, setCategory } = useProductCategory();
-  const { data, isLoading, error } = useFetchAllProducts();
+  const {
+    data,
+    error,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useProducts();
   const { ref, inView } = useInView({
-    threshold: 0.5,
+    threshold: 1.0,
     triggerOnce: false,
   });
   const [sortOption, setSortOption] = useState('productPrice');
   const [sortedProducts, setSortedProducts] = useState<ProductCard[]>([]);
-  const lastFetchedPage = useRef<number>(0);
 
   const handleSortByPrice = () => {
     setSortOption('productPrice');
@@ -36,6 +44,14 @@ const AllProductPage: React.FC = () => {
     setCategory('accessory');
   };
 
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      // 다음 페이지를 가져오는 로직
+      console.log('Fetching next page...');
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
+
   return (
     <main>
       <div className="p-20">
@@ -43,7 +59,7 @@ const AllProductPage: React.FC = () => {
           {category === null ? (
             <h3 className="text-3xl mb-12"> 전체물품입니다</h3>
           ) : (
-            <h3 className="text-3xl"> {category}의 물품입니다</h3>
+            <h3 className="text-3xl"> {category}</h3>
           )}
           <div className="flex justify-between">
             <div className="flex">
@@ -100,22 +116,22 @@ const AllProductPage: React.FC = () => {
             </div>
           </div>
         </div>
-        {/* <div className="grid grid-cols-3 gap-4">
-          {sortedProducts.map(product => (
-            <MainProductCard key={product.id} product={product} />
-          ))}
-          <div ref={ref} className="h-20 background-transparent">
-            {isFetchingNextPage && (
-              <div className="w-full h-full min-h-0.5">
-                <h1 className="w-full h-full">현재 로딩중입니다.</h1>
-              </div>
-            )}
-          </div>
-        </div> */}
-        <div className="flex flex-wrap justify-start">
-          {data?.map(product => (
-            <MainProductCard key={product.id} product={product} />
-          ))}
+        <div className="grid grid-cols-6 gap-4">
+          {data?.pages.flatMap((page, pageIndex) =>
+            page.products.map(product => (
+              <MainProductCard
+                key={`${pageIndex}-${pageIndex}`}
+                product={product}
+              />
+            )),
+          )}
+        </div>
+
+        {/* 무한 스크롤 트리거 */}
+        <div ref={ref} className="h-20 flex items-center justify-center">
+          {isFetchingNextPage && (
+            <h1 className="text-center">현재 로딩중입니다...</h1>
+          )}
         </div>
       </div>
     </main>

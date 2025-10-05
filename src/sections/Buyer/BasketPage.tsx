@@ -17,7 +17,7 @@ const BasketPage: React.FC = () => {
   };
 
   const totalAmount = cart.reduce(
-    (total, product) => total + product.productPrice * product.productQuantity,
+    (total, product) => total + product.productPrice * product.quantity,
     0,
   );
   const shippingFee = 3000;
@@ -73,24 +73,18 @@ const BasketPage: React.FC = () => {
                     <div className="flex items-center">
                       <Button
                         onClick={() =>
-                          handleQuantityChange(
-                            product.id,
-                            product.productQuantity - 1,
-                          )
+                          handleQuantityChange(product.id, product.quantity - 1)
                         }
                         className="w-8 h-8 rounded-full bg-gray-600 text-white hover:bg-gray-700 transition-colors"
                       >
                         -
                       </Button>
                       <span className="mx-4 text-xl font-bold w-6 text-center">
-                        {product.productQuantity}
+                        {product.quantity}
                       </span>
                       <Button
                         onClick={() =>
-                          handleQuantityChange(
-                            product.id,
-                            product.productQuantity + 1,
-                          )
+                          handleQuantityChange(product.id, product.quantity + 1)
                         }
                         className="w-8 h-8 rounded-full bg-gray-600 text-white hover:bg-gray-700 transition-colors"
                       >

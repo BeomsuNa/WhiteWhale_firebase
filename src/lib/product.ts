@@ -40,8 +40,8 @@ export interface ProductCard extends UploadProduct {
   email: string; // 파생 정보
 }
 
-export interface CartProduct extends Omit<UploadProduct, 'productQuantity'> {
-  productQuantity: number;
+export interface CartProduct extends Omit<UploadProduct, 'quantity'> {
+  quantity: number;
 }
 
 // 특정 키를 Optional(선택적)로 바꾸는 유틸리티
