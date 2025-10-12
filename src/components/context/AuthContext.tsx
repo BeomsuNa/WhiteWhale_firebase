@@ -14,7 +14,6 @@ import {
 
 import fetchUser from '@/hooks/FetchUser';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { query } from 'firebase/firestore';
 
 export interface User {
   uid: string;

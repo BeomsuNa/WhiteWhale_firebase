@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import LoginInfoGuest from '@/sections/Login/LoginInfoGuest';
 import LoginInfoSeller from '@/sections/Login/LoginInfoSeller';
 import LoginInfoUser from '@/sections/Login/LoginInfoUser';
+import { Elegant } from '@/assets/logo';
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -42,7 +43,7 @@ const Header = () => {
     <div className="w-full flex justify-between p-4 bg-rgb(55, 58, 64) text-white">
       <Avatar>
         <AvatarImage
-          src="../logo/Elegant.webp"
+          src={Elegant}
           className="w-24 h-24"
           onClick={() => handleMainPage}
           alt="logo"

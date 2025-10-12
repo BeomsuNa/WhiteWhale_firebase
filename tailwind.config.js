@@ -38,12 +38,16 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        black01: 'rgba(0, 0, 0, 0.6)',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+    },
+    fontFamily: {
+      gmarket: [],
     },
   },
   plugins: [require('tailwindcss-animate')],

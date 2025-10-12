@@ -1,5 +1,5 @@
 import * as PortOne from '@portone/browser-sdk/v2';
-import { useCart } from '@/components/context/CartContext';
+
 import { Button } from '@/components/ui/button';
 import Geocoder from '@/Order/Geocoder';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -14,17 +14,18 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
+import { useCart } from '@/hooks/UseCart';
 
 const BuyProductPage = () => {
   const { data: user } = useQuery<User>({ queryKey: ['user'] });
   const navigate = useNavigate();
-  const { cart, updateCartQuantity, clearCart } = useCart();
+  const { cart, updateQuantity, clearCart } = useCart();
   const queryClient = useQueryClient();
   const { data: addressData } = useQuery({ queryKey: ['addressData'] });
 
   const handleQuantityChange = (productId: string, quantity: number) => {
     if (quantity < 1) return;
-    updateCartQuantity(productId, quantity);
+    updateQuantity(productId, quantity);
   };
 
   const handlePayment = async () => {

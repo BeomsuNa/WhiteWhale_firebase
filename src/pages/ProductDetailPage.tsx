@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
   CarouselApi,
 } from '@/components/ui/carousel';
-import { useCart } from '@/components/context/CartContext';
+
 import { Label } from '@radix-ui/react-label';
 import {
   Select,
@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useCart } from '@/hooks/UseCart';
 
 interface MainProductCardProps {
   sortOption: string;

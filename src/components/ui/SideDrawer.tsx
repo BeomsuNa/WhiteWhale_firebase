@@ -1,5 +1,5 @@
+import { useCart } from '@/hooks/UseCart';
 import { useEffect, useState } from 'react';
-import { useCart } from '../context/CartContext';
 import { Link } from 'react-router-dom';
 
 const SideDrawer = () => {

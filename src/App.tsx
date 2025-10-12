@@ -9,15 +9,32 @@ import SideDrawer from './components/ui/SideDrawer';
 import Footer from './components/ui/Footer';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useAuthStore } from './stores/authStore';
+import { useEffect, useMemo } from 'react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 function App() {
-  const queryClient = new QueryClient();
+  const queryClient = useMemo(() => new QueryClient(), []);
+  const setFirebaseUser = useAuthStore(s => s.setFirebaseUser);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setFirebaseUser(user);
+      if (user) {
+        queryClient.setQueryData(['user', user.uid], user);
+      } else {
+        queryClient.removeQueries({ queryKey: ['user'] });
+      }
+    });
+    return () => unsubscribe();
+  }, [setFirebaseUser, queryClient]);
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ProductCategoryProvider>
           <div
-            className="w-full min-h-screen flex flex-col justify-start  bg-backgroundColor "
+            className="w-full min-h-screen flex flex-col justify-start  "
             id="mainSection"
           >
             <Header />

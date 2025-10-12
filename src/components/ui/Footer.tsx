@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { GitHub, Notion } from '@/assets/logo';
 
 const Footer = () => {
   return (
@@ -8,7 +9,7 @@ const Footer = () => {
           <h2>GitHub :</h2>
           <Link rel="preconnect" to="https://github.com/pass98/whiteWhale">
             <img
-              src="/logo/GitHub.webp"
+              src={GitHub}
               alt="GitHub.png"
               className="ml-2 size-8 object-cover w-8 h-8 "
             />
@@ -25,7 +26,7 @@ const Footer = () => {
           <h2>Notion : </h2>
           <div className=" ml-2 size-8">
             <img
-              src="/logo/Notion.webp"
+              src={Notion}
               alt="notion.png"
               className="obejct-cover w-8 h-8"
             />

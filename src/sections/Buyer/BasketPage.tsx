@@ -1,19 +1,19 @@
-import { useCart } from '@/components/context/CartContext';
+import { useCart } from '@/hooks/UseCart';
 import { Button } from '@/components/ui/button';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const BasketPage: React.FC = () => {
-  const { cart, updateCartQuantity, removeFromCart } = useCart();
+  const { cart, updateQuantity, removeFromCart } = useCart();
   const navigate = useNavigate();
 
   const handleQuantityChange = (productId: string, quantity: number) => {
     if (quantity < 1) return;
-    updateCartQuantity(productId, quantity);
+    updateQuantity(productId, quantity);
   };
 
   const goToBuyProductPage = () => {
-    navigate('/buyprodcut');
+    navigate('/buyproduct');
   };
 
   const totalAmount = cart.reduce(
