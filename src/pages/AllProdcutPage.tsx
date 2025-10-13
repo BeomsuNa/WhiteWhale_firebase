@@ -57,7 +57,7 @@ const AllProductPage: React.FC = () => {
       <div className="p-20">
         <div>
           {category === null ? (
-            <h3 className="text-3xl mb-12"> 전체물품입니다</h3>
+            <h3 className="text-3xl mb-12"> 전체물품 확인하기</h3>
           ) : (
             <h3 className="text-3xl"> {category}</h3>
           )}

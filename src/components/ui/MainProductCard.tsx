@@ -8,8 +8,6 @@ interface MainProductCardProps {
 }
 
 const MainProductCard: React.FC<MainProductCardProps> = ({ product }) => {
-  const { preFetchData } = usePreFetchProduct();
-
   if (!product) {
     alert('정보를 받아오지 못했음');
     return <div>Loading....</div>;
@@ -22,20 +20,20 @@ const MainProductCard: React.FC<MainProductCardProps> = ({ product }) => {
     >
       <Link to={`/buy/${product.id}`} state={{ product }}>
         <figure
-          className="w-full h-full flex justify-center items-center "
+          className="w-full h-44 flex justify-center items-center "
           id="MainProductCardImgSection"
         >
           <img
             src={product.imageUrl}
             alt={product.productName}
-            className="w-48 h-44  border border-black border-0.5 transition duration-300 group-hover:opacity-50"
+            className="w-full h-44  border border-black border-0.5 transition duration-300 group-hover:opacity-50"
           />
 
           <figcaption className="sr-only">{product.productName}</figcaption>
         </figure>
-        <div className="w-full mb-1 group-hover:border-black group-hover:border-1" />
+        <div className="w-full  group-hover:border-black group-hover:border-1" />
         <div
-          className="flex flex-col justify-center items-center  h-1/3 "
+          className="flex flex-col mt-3 h-1/3 items-start"
           id="MainCardGuideLine"
         >
           <div
@@ -47,7 +45,7 @@ const MainProductCard: React.FC<MainProductCardProps> = ({ product }) => {
           <div className="w-full border-t border-white my-2 group-hover:border-black group-hover:border-1" />
           <div
             id="mainCardPrice"
-            className="text-white font-bold group-hover:text-black"
+            className="text-white font-bold group-hover:text-black "
           >
             {product.productPrice
               .toString()
