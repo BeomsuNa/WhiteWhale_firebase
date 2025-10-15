@@ -4,7 +4,15 @@ import { GitHub, Notion } from '@/assets/logo';
 const Footer = () => {
   return (
     <footer>
-      <div className="flex flex-col justify-center items-center w-full h-72 bg-slate-500  ">
+      <div
+        className="flex flex-col justify-center items-center w-full 
+  min-w-[460px]           
+  sm:min-w-[500px]        
+  md:min-w-[750px]        
+  lg:min-w-[850px]       
+  xl:min-w-[900px]        
+   mx-aut h-72 bg-slate-500  "
+      >
         <div className=" flex items-center p-5">
           <h2>GitHub :</h2>
           <Link rel="preconnect" to="https://github.com/pass98/whiteWhale">

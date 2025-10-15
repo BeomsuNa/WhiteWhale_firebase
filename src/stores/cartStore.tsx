@@ -42,7 +42,6 @@ export const useCartStore = create<CartState>()(
         isLoading: false,
         user: null,
 
-        // 🧩 Firestore에서 장바구니 가져오기
         fetchCart: async () => {
           const auth = getAuth();
           const user = auth.currentUser;
@@ -53,7 +52,6 @@ export const useCartStore = create<CartState>()(
           set({ cart, isLoading: false });
         },
 
-        // 🧩 장바구니 추가
         addToCart: async (product, quantity = 1) => {
           const auth = getAuth();
           const user = auth.currentUser;
@@ -79,7 +77,6 @@ export const useCartStore = create<CartState>()(
           await updateCartToFirestore(user, newCart);
         },
 
-        // 🧩 장바구니 항목 삭제
         removeFromCart: async id => {
           const auth = getAuth();
           const user = auth.currentUser;
@@ -90,7 +87,6 @@ export const useCartStore = create<CartState>()(
           await updateCartToFirestore(user, newCart);
         },
 
-        // 🧩 수량 변경
         updateQuantity: async (id, quantity) => {
           const auth = getAuth();
           const user = auth.currentUser;
@@ -103,7 +99,6 @@ export const useCartStore = create<CartState>()(
           await updateCartToFirestore(user, newCart);
         },
 
-        // 🧩 장바구니 초기화
         clearCart: async () => {
           const auth = getAuth();
           const user = auth.currentUser;

@@ -30,7 +30,7 @@ const SideDrawer = () => {
     <div>
       <button
         onClick={toggleDrawer}
-        className={`fixed top-1/3 right-0 p-2 bg-blue-500 text-white rounded transform transition-transform duration-300 z-50 ${isOpen ? `translate-x-[-16rem]` : ''}`}
+        className={`fixed top-1/3 right-0 p-2 min-h-[200px] bg-blue-500 text-white rounded hover:bg-blue-700 hover:font-semibold hover:shadow-md transform transition-transform duration-300 z-50 ${isOpen ? `translate-x-[-16rem]` : ''}`}
         style={{ writingMode: 'vertical-rl', textOrientation: 'upright' }}
         type="button"
       >

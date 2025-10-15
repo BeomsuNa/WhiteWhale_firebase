@@ -1,9 +1,7 @@
 import MainProductCard from '@/components/ui/MainProductCard';
-import { UploadProduct } from '@/lib/product';
 import { useFetchProductCardData } from '@/hooks/UseFetchData';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useProductCategory } from '@/components/context/ProductCategoryContext';
 import { v4 as uuidv4 } from 'uuid';
 import {
   Carousel,
@@ -15,7 +13,6 @@ import {
 import { Label } from '@radix-ui/react-label';
 import Skeleton from '../components/ui/Skele';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import MenuBarWithButton from '@/components/ui/menuBarWithButton';
 import SearchBar from '@/components/ui/searchBar';
 import Autoplay from 'embla-carousel-autoplay';
@@ -29,14 +26,11 @@ import {
   rightSlide3,
   keyboard,
   keycap,
-  accsessory,
+  accessory,
   HOT,
   best,
 } from '@/assets/logo';
-
-interface CategorizedProducts {
-  [category: string]: UploadProduct[];
-}
+import { useCategoryStore } from '@/stores/categoryStore';
 
 interface MainPageLayOutProps {
   sortOption: string;
@@ -49,27 +43,15 @@ const MainPageLayOut: React.FC<MainPageLayOutProps> = React.memo(
       isLoading,
       error,
     } = useFetchProductCardData(sortOption || '');
-    const { setCategory } = useProductCategory();
+    const category = useCategoryStore(s => s.category);
+    const setCategory = useCategoryStore(s => s.setCategory);
     const navigate = useNavigate();
-    const [openMenu, setOpenMenu] = useState(false);
-    const categorizedProducts = products?.reduce<CategorizedProducts>(
-      (acc, product) => {
-        const category = product.productCategory;
-        if (!acc[category]) {
-          acc[category] = [];
-        }
-        acc[category].push(product);
-        return acc;
-      },
-      {},
-    );
-    const handleCategoryClick = (category: string | null) => {
-      if (category) {
-        setCategory(category);
-        navigate('/Products');
-      }
+    const handleCategory = (selectedCategory: string) => {
+      setCategory(selectedCategory);
       navigate('/Products');
     };
+
+    const [openMenu, setOpenMenu] = useState(false);
     const plugin = React.useRef(
       Autoplay({ delay: 2000, stopOnInteraction: true }),
     );
@@ -235,13 +217,16 @@ const MainPageLayOut: React.FC<MainPageLayOutProps> = React.memo(
               </div>
 
               {/* 🔹 다른 카드들 (기존 그대로 유지) */}
-              {[keyboard, keycap, accsessory, best].map((img, i) => {
+              {[keyboard, keycap, accessory, best].map((img, i) => {
                 const titles = ['키보드', '키캡', '악세서리', '베스트'];
+                const categories = ['keyboard', 'key', 'accessory', 'best'];
                 const title = titles[i];
                 return (
-                  <div
+                  <button
+                    type="button"
                     key={`section-${title}`}
                     className="group flex flex-col gap-3 items-center transition-all duration-300 hover:font-bold"
+                    onClick={() => handleCategory(categories[i])}
                   >
                     <div
                       className="
@@ -259,7 +244,7 @@ const MainPageLayOut: React.FC<MainPageLayOutProps> = React.memo(
                     <h2 className="text-lg transition-all duration-300 group-hover:font-bold">
                       {titles[i]}
                     </h2>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -271,54 +256,13 @@ const MainPageLayOut: React.FC<MainPageLayOutProps> = React.memo(
             </Label>
             <Button
               className="text-sm font-medium text-slate-50 hover:text-[#B1A7A7] transition-colors"
-              onClick={() => handleCategoryClick(null)}
+              onClick={() => setCategory('all')}
               type="button"
             >
               전체보기
             </Button>
           </div>
-          {categorizedProducts &&
-            Object.entries(categorizedProducts).map(
-              ([category, productsIndex]) => (
-                <div key={category} className="category-section">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex-1 flex justify-center">
-                      <Label className="text-xl font-semibold text-slate-50 tracking-tight">
-                        {category}
-                      </Label>
-                    </div>
-                    <Button
-                      className="text-sm font-medium text-slate-50 hover:text-[#B1A7A7] transition-colors "
-                      onClick={() => handleCategoryClick(category)}
-                      type="button"
-                    >
-                      {' '}
-                      전체보기
-                    </Button>
-                    <hr className="border-t border-gray-300 mt-8" />
-                  </div>
-                  <Carousel
-                    opts={{ loop: true }}
-                    plugins={[]}
-                    orientation="horizontal"
-                    setApi={() => {}}
-                  >
-                    <CarouselContent className="flex gpa-4 mb-12 ">
-                      {productsIndex.map(product => (
-                        <CarouselItem
-                          key={product.id}
-                          className="flex-shrink-0 basis-1/5 "
-                        >
-                          <MainProductCard product={product} />
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                  </Carousel>
-                </div>
-              ),
-            )}
+
           <section className="grid grid-cols-3 grid-rows-3 gap-4 p-8 max-w-6xl mx-auto">
             <div className="col-span-2 row-span-2 bg-gray-100 rounded-2xl p-6 flex flex-col justify-between">
               <h2 className="text-2xl font-bold text-red-600">

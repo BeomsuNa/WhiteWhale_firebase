@@ -7,6 +7,7 @@ import {
   FirestoreDataConverter,
   SnapshotOptions,
   DocumentData,
+  where,
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
 import { ProductCard, UploadProduct } from '@/lib/product';
@@ -31,20 +32,39 @@ const productCardConverter: FirestoreDataConverter<UploadProduct> = {
 
 export const fetchProductCardData = async (
   sortOption: string,
+  category: string,
 ): Promise<UploadProduct[]> => {
   let IndexOption;
-  if (sortOption === 'date') {
-    IndexOption = query(collection(db, 'Product'), orderBy('updateAt', 'desc'));
-  } else if (sortOption === 'price') {
-    IndexOption = query(
-      collection(db, 'Product'),
-      orderBy('productPrice', 'desc'),
-    );
-  } else {
-    IndexOption = collection(db, 'Product');
+  const productRef = collection(db, 'Product');
+  // 🧩 동적 쿼리 구성
+  if (category && category !== 'all') {
+    if (sortOption === 'price') {
+      IndexOption = query(
+        productRef,
+        where('productCategory', '==', category),
+        orderBy('productPrice', 'desc'),
+      );
+    } else if (sortOption === 'date') {
+      IndexOption = query(
+        productRef,
+        where('productCategory', '==', category),
+        orderBy('updatedAt', 'desc'),
+      );
+    } else {
+      IndexOption = query(productRef, where('productCategory', '==', category));
+    }
   }
 
-  const querySnapshot = await getDocs(IndexOption);
+  // 카테고리 전체 보기
+  if (sortOption === 'price') {
+    IndexOption = query(productRef, orderBy('productPrice', 'desc'));
+  } else if (sortOption === 'date') {
+    IndexOption = query(productRef, orderBy('updatedAt', 'desc'));
+  } else {
+    IndexOption = productRef;
+  }
+
+  const querySnapshot = await getDocs(IndexOption!);
   const products: UploadProduct[] = querySnapshot.docs.map(
     (doc: QueryDocumentSnapshot) => {
       const docData = doc.data();

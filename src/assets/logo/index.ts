@@ -16,7 +16,7 @@ import MenuIcon from './MenuIcon.webp';
 import Notion from './Notion.webp';
 import keyboard from './keyboard.jpg';
 import keycap from './keycap.jpeg';
-import accsessory from './accsessory.jpg';
+import accessory from './accessory.jpg';
 import HOT from './HOT.jpg';
 import best from './best.jpg';
 
@@ -39,7 +39,7 @@ export {
   Notion,
   keyboard,
   keycap,
-  accsessory,
+  accessory,
   HOT,
   best,
 };

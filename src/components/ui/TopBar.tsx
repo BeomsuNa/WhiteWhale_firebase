@@ -40,7 +40,15 @@ const Header = () => {
   };
 
   return (
-    <div className="w-full flex justify-between p-4 bg-rgb(55, 58, 64) text-white">
+    <div
+      className="w-full 
+  min-w-[300px]           
+  sm:min-w-[500px]        
+  md:min-w-[750px]        
+  lg:min-w-[850px]       
+  xl:min-w-[900px]        
+   mx-aut flex justify-between p-4 bg-rgb(55, 58, 64) text-white"
+    >
       <Avatar>
         <AvatarImage
           src={Elegant}

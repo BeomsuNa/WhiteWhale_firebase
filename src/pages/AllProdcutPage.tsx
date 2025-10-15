@@ -9,9 +9,10 @@ import Skele from '@/components/ui/Skele';
 import { useFetchAllProducts } from '@/hooks/useFetchAllProducts';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useProducts } from '@/hooks/UseFetchInfinityProducts';
+import { useCategoryStore } from '@/stores/categoryStore';
 
 const AllProductPage: React.FC = () => {
-  const { category, setCategory } = useProductCategory();
+  const { category, setCategory } = useCategoryStore();
   const {
     data,
     error,
@@ -51,7 +52,7 @@ const AllProductPage: React.FC = () => {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
-
+  console.log('지금은?', category);
   return (
     <main>
       <div className="p-20">
@@ -118,12 +119,16 @@ const AllProductPage: React.FC = () => {
         </div>
         <div className="grid grid-cols-6 gap-4">
           {data?.pages.flatMap((page, pageIndex) =>
-            page.products.map(product => (
-              <MainProductCard
-                key={`${pageIndex}-${pageIndex}`}
-                product={product}
-              />
-            )),
+            page.products
+              .filter(
+                product =>
+                  !category ||
+                  category === 'all' ||
+                  product.productCategory === category,
+              )
+              .map(product => (
+                <MainProductCard key={product.id} product={product} />
+              )),
           )}
         </div>
 
