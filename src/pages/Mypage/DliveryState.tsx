@@ -39,15 +39,6 @@ const DliveryState = () => {
               '구매확정',
             ].map((label, i, arr) => (
               <li key={label} className="relative flex flex-col items-center">
-                {/* 🔹 화살표 — 마지막 항목 제외 */}
-                {i !== arr.length - 1 && (
-                  <span
-                    className="absolute right-[-40px] top-1/2 -translate-y-1/2
-                       w-0 h-0 border-t-4 border-b-4 border-l-8
-                       border-t-transparent border-b-transparent border-l-gray-400"
-                  />
-                )}
-
                 {/* 🔹 상태 항목 */}
                 <b className="font-normal mb-1">{label}</b>
                 <strong className="w-16 h-16 flex items-center justify-center rounded-full bg-white text-gray-700 font-semibold">

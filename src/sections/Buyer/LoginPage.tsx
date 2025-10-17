@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import LoginForm from '@/sections/Login/LoginForm';
 import Login from '@/sections/Login/Login';
-import { useAuth } from '@/components/context/AuthContext';
+import { useAuthStore } from '@/stores/authStore';
 
 const LoginPage: React.FC = () => {
   const [credentials, setCredentials] = useState<{
     email: string;
     passWord: string;
   } | null>(null);
-  const { login } = useAuth();
+  const { login } = useAuthStore();
 
   const handleLogin = (email: string, passWord: string) => {
     setCredentials({ email, passWord });

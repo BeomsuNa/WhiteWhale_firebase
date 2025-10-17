@@ -1,7 +1,7 @@
-import { useAuth } from '@/components/context/AuthContext';
 import OrderForm from '@/components/ui/OrderForm';
 import { db } from '@/config/firebase';
 import { usePayments } from '@/Order/FetchPayments';
+import { useAuthStore } from '@/stores/authStore';
 import { Mutation, useMutation, useQueryClient } from '@tanstack/react-query';
 import { doc, updateDoc } from 'firebase/firestore';
 
@@ -28,8 +28,8 @@ const useCancelOrder = () => {
 };
 
 const OrderStatus = () => {
-  const { user } = useAuth();
-  const userId = user?.uid ?? '';
+  const userId = useAuthStore(s => s.firebaseUser!.uid);
+
   const { data: payments, isLoading, error } = usePayments(userId);
   const cancelOrderMutation = useCancelOrder();
 

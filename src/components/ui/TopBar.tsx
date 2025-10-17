@@ -1,13 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
-import { useAuth } from '../context/AuthContext';
 import LoginInfoGuest from '@/sections/Login/LoginInfoGuest';
 import LoginInfoSeller from '@/sections/Login/LoginInfoSeller';
 import LoginInfoUser from '@/sections/Login/LoginInfoUser';
 import { Elegant } from '@/assets/logo';
+import { useAuthStore } from '@/stores/authStore';
 
 const Header = () => {
-  const { user, logout } = useAuth();
+  const user = useAuthStore(s => s.userRoleData);
+  const isLoggedIn = useAuthStore(s => s.isLoggedIn);
+  const logout = useAuthStore(s => s.logout);
   const navigate = useNavigate();
 
   const handleLogOutButton = () => {
@@ -20,20 +22,20 @@ const Header = () => {
   };
 
   const getloginInfoSection = () => {
-    if (!user) {
+    if (!isLoggedIn || !user) {
       return <LoginInfoGuest />;
     }
-    if (user.isSeller) {
+    if (isLoggedIn && user.isSeller) {
       return (
         <LoginInfoSeller
-          nickname={user.nickname}
+          nickname={user.nickname ?? '판매자'}
           handleLogOutButton={handleLogOutButton}
         />
       );
     }
     return (
       <LoginInfoUser
-        nickname={user.nickname}
+        nickname={user.nickname ?? '구매자'}
         handleLogOutButton={handleLogOutButton}
       />
     );

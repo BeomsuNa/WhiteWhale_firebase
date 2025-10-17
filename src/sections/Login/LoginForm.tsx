@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/components/context/AuthContext';
+import { useAuthStore } from '@/stores/authStore';
 
 interface LoginFormProps {
   onLogin: (email: string, passWord: string) => void;
@@ -13,7 +13,7 @@ const LoginForm: React.FC<LoginFormProps> = () => {
   const [email, setEmail] = useState<string>('');
   const [passWord, setPassWord] = useState<string>('');
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login } = useAuthStore();
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
