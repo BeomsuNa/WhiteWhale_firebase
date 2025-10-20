@@ -25,8 +25,6 @@ function mapDocToProduct(doc: QueryDocumentSnapshot): Product {
     productName: docData.productName,
     productPrice: docData.productPrice,
     productQuantity: docData.productQuantity,
-    sellerId: docData.sellerId,
-    updatedAt: docData.updatedAt,
     imageUrl: docData.imageUrl,
   };
 }
@@ -54,7 +52,7 @@ const FetchProducts = async ({
 };
 export default FetchProducts;
 
-export const useProducts = () => {
+export const UseProducts = () => {
   return useInfiniteQuery<
     FetchProductsResult,
     Error,

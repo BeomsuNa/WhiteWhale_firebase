@@ -14,7 +14,7 @@ export async function mainLoader() {
   });
 
   const end = performance.now();
-  console.log(`🔥 Loader Prefetch Duration: ${(end - start).toFixed(2)} ms`);
+  console.log(` Loader Prefetch Duration: ${(end - start).toFixed(2)} ms`);
 
   return null;
 }

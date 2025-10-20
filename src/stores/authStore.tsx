@@ -10,7 +10,7 @@ import {
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/config/firebase';
 
-interface UserRoleData {
+export interface UserRoleData {
   uid: string;
   email: string | null;
   nickname?: string;

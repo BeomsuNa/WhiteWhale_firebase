@@ -1,8 +1,9 @@
 // src/hooks/useCart.ts
-import { useQueryClient } from '@tanstack/react-query';
+
 import { useCartStore } from '@/stores/cartStore';
 import { useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getQueryClient } from '@/config/queryClient';
 
 export const useCart = () => {
   const {
@@ -15,7 +16,7 @@ export const useCart = () => {
     clearCart,
   } = useCartStore();
 
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   const auth = getAuth();
 
   useEffect(() => {

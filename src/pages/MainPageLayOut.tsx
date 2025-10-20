@@ -31,6 +31,8 @@ import {
   best,
 } from '@/assets/logo';
 import { useCategoryStore } from '@/stores/categoryStore';
+import { getQueryClient } from '@/config/queryClient';
+import { UseProducts } from '@/hooks/UseFetchInfinityProducts';
 
 interface MainPageLayOutProps {
   sortOption: string;
@@ -38,6 +40,7 @@ interface MainPageLayOutProps {
 
 const MainPageLayOut: React.FC<MainPageLayOutProps> = React.memo(
   ({ sortOption }) => {
+    const queryClient = getQueryClient();
     const category = useCategoryStore(s => s.category);
     const setCategory = useCategoryStore(s => s.setCategory);
     const navigate = useNavigate();
@@ -50,6 +53,17 @@ const MainPageLayOut: React.FC<MainPageLayOutProps> = React.memo(
     const plugin = React.useRef(
       Autoplay({ delay: 2000, stopOnInteraction: true }),
     );
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        queryClient.prefetchQuery({
+          queryKey: ['products'],
+          queryFn: () => UseProducts(), // 전체 데이터 가져오기
+          staleTime: 1000 * 60 * 3,
+        });
+      }, 1500); // 1.5초 후 백그라운드 캐싱 시작
+      return () => clearTimeout(timer);
+    }, [queryClient]);
 
     // if (isLoading) {
     //   const skeletonCount = 5;

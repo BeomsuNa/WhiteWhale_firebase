@@ -7,7 +7,7 @@ import { useFetchSortedProducts } from '@/hooks/FetchSortedProducts';
 import { v4 as uuidv4 } from 'uuid';
 import Skele from '@/components/ui/Skele';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useProducts } from '@/hooks/UseFetchInfinityProducts';
+import { UseProducts } from '@/hooks/UseFetchInfinityProducts';
 import { useCategoryStore } from '@/stores/categoryStore';
 
 const AllProductPage: React.FC = () => {
@@ -19,7 +19,7 @@ const AllProductPage: React.FC = () => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = useProducts();
+  } = UseProducts();
   const { ref, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false,

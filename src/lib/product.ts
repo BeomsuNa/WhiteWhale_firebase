@@ -18,13 +18,11 @@ export interface UploadProduct {
   productPrice: number;
   imageUrl: string;
   productQuantity?: number;
-  updatedAt?: Timestamp;
+  createdAt: Timestamp;
 }
 
 export interface Product extends UploadProduct {
-  createdAt: Timestamp;
   productDescription: string;
-  sellerId: number;
 }
 
 export interface FetchProductsResult {
@@ -49,3 +47,13 @@ type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 // 특정 키를 Required(필수)로 바꾸는 유틸리티
 type WithRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+
+export type FirestoreCartItem = {
+  id: string;
+  productCategory: string;
+  productName: string;
+  productPrice: number;
+  imageUrl: string;
+  productQuantity?: number;
+  quantity: number;
+};

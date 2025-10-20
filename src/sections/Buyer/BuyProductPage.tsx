@@ -2,10 +2,10 @@ import * as PortOne from '@portone/browser-sdk/v2';
 
 import { Button } from '@/components/ui/button';
 import Geocoder from '@/Order/Geocoder';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { User } from '@/components/context/AuthContext';
+import { useQuery } from '@tanstack/react-query';
 import { PaymentResponse } from '@/lib/payments';
 import { useNavigate } from 'react-router-dom';
+import { UserRoleData } from '@/stores/authStore';
 import {
   collection,
   doc,
@@ -15,12 +15,13 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/config/firebase';
 import { useCart } from '@/hooks/UseCart';
+import { getQueryClient } from '@/config/queryClient';
 
 const BuyProductPage = () => {
-  const { data: user } = useQuery<User>({ queryKey: ['user'] });
+  const { data: user } = useQuery<UserRoleData>({ queryKey: ['user'] });
   const navigate = useNavigate();
   const { cart, updateQuantity, clearCart } = useCart();
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   const { data: addressData } = useQuery({ queryKey: ['addressData'] });
 
   const handleQuantityChange = (productId: string, quantity: number) => {

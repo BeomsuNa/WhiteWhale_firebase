@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import ProductCard from '@/components/ui/ProductCardLayOut';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useProducts } from '@/hooks/UseFetchInfinityProducts';
+import { UseProducts } from '@/hooks/UseFetchInfinityProducts';
 
 const RegistrationProductPage = () => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const RegistrationProductPage = () => {
     isLoading,
     isFetchingNextPage,
     error,
-  } = useProducts();
+  } = UseProducts();
 
   useEffect(() => {
     if (inView && hasNextPage) {
