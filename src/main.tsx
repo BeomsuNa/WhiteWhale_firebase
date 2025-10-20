@@ -14,13 +14,20 @@ import BasketPage from './sections/Buyer/BasketPage';
 import BuyProductPage from './sections/Buyer/BuyProductPage';
 import RegistrationProductPage from './sections/Seller/RegistrationProductPage';
 import OrderStatus from './sections/Buyer/OrderStatus';
+import { mainLoader } from './hooks/mainLoader';
+import { getQueryClient } from './config/queryClient';
 
+const queryclent = getQueryClient();
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
-      { path: '/', element: <MainPageLayOut sortOption="default" /> },
+      {
+        path: '/',
+        loader: mainLoader,
+        element: <MainPageLayOut sortOption="default" />,
+      },
       { path: '/login', element: <Login /> },
       { path: '/mypage', element: <MyPage /> },
       {

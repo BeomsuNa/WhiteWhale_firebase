@@ -15,7 +15,7 @@ const MainProductCard: React.FC<MainProductCardProps> = ({ product }) => {
 
   return (
     <article
-      className="max-w-64 max-h-64 rounded-xl  border-white m-3 hover:bg-[#4B4E54] hover:border-black hover:border-2 transition-colors duration-200 group"
+      className="max-w-64 max-h-64 rounded-xl  border-white m-3 hover:bg-[#4B4E54]  transition-colors duration-200 group"
       id="cardBorderSection"
     >
       <Link to={`/buy/${product.id}`} state={{ product }}>

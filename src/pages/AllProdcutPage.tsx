@@ -6,7 +6,6 @@ import { ProductCard } from '@/lib/product';
 import { useFetchSortedProducts } from '@/hooks/FetchSortedProducts';
 import { v4 as uuidv4 } from 'uuid';
 import Skele from '@/components/ui/Skele';
-import { useFetchAllProducts } from '@/hooks/useFetchAllProducts';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useProducts } from '@/hooks/UseFetchInfinityProducts';
 import { useCategoryStore } from '@/stores/categoryStore';
@@ -22,7 +21,7 @@ const AllProductPage: React.FC = () => {
     isFetchingNextPage,
   } = useProducts();
   const { ref, inView } = useInView({
-    threshold: 1.0,
+    threshold: 0.2,
     triggerOnce: false,
   });
   const [sortOption, setSortOption] = useState('productPrice');
@@ -47,12 +46,9 @@ const AllProductPage: React.FC = () => {
 
   useEffect(() => {
     if (inView && hasNextPage) {
-      // 다음 페이지를 가져오는 로직
-      console.log('Fetching next page...');
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
-  console.log('지금은?', category);
   return (
     <main>
       <div className="p-20">

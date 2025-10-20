@@ -38,11 +38,6 @@ interface MainPageLayOutProps {
 
 const MainPageLayOut: React.FC<MainPageLayOutProps> = React.memo(
   ({ sortOption }) => {
-    const {
-      data: products,
-      isLoading,
-      error,
-    } = useFetchProductCardData(sortOption || '');
     const category = useCategoryStore(s => s.category);
     const setCategory = useCategoryStore(s => s.setCategory);
     const navigate = useNavigate();
@@ -56,69 +51,69 @@ const MainPageLayOut: React.FC<MainPageLayOutProps> = React.memo(
       Autoplay({ delay: 2000, stopOnInteraction: true }),
     );
 
-    if (isLoading) {
-      const skeletonCount = 5;
-      return (
-        <main className="w-full flex items-center justify-center">
-          <div className="w-full max-w-screen-2xl px-4" id="mainpage">
-            {/* 헤더 영역 */}
-            <div className="flex items-center justify-between border-b border-gray-700 pb-4 mb-6">
-              <Label className="text-xl font-semibold text-slate-300 tracking-tight mb-5">
-                신상품
-              </Label>
-              <Button
-                disabled
-                className="text-sm font-medium text-slate-400 cursor-default"
-              >
-                전체보기
-              </Button>
-            </div>
+    // if (isLoading) {
+    //   const skeletonCount = 5;
+    //   return (
+    //     <main className="w-full flex items-center justify-center">
+    //       <div className="w-full max-w-screen-2xl px-4" id="mainpage">
+    //         {/* 헤더 영역 */}
+    //         <div className="flex items-center justify-between border-b border-gray-700 pb-4 mb-6">
+    //           <Label className="text-xl font-semibold text-slate-300 tracking-tight mb-5">
+    //             신상품
+    //           </Label>
+    //           <Button
+    //             disabled
+    //             className="text-sm font-medium text-slate-400 cursor-default"
+    //           >
+    //             전체보기
+    //           </Button>
+    //         </div>
 
-            {/* 카테고리별 섹션 (스켈레톤) */}
-            {[...Array(2)].map((_, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <div key={i} className="category-section mb-12">
-                {/* 카테고리 타이틀 */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex-1 flex justify-center">
-                    <div className="h-6 w-32 bg-slate-700 rounded-md animate-pulse" />
-                  </div>
-                  <div className="h-6 w-20 bg-slate-700 rounded-md animate-pulse" />
-                </div>
+    //         {/* 카테고리별 섹션 (스켈레톤) */}
+    //         {[...Array(2)].map((_, i) => (
+    //           // eslint-disable-next-line react/no-array-index-key
+    //           <div key={i} className="category-section mb-12">
+    //             {/* 카테고리 타이틀 */}
+    //             <div className="flex items-center justify-between mb-4">
+    //               <div className="flex-1 flex justify-center">
+    //                 <div className="h-6 w-32 bg-slate-700 rounded-md animate-pulse" />
+    //               </div>
+    //               <div className="h-6 w-20 bg-slate-700 rounded-md animate-pulse" />
+    //             </div>
 
-                {/* 구분선 */}
-                <hr className="border-t border-gray-700 mb-6" />
+    //             {/* 구분선 */}
+    //             <hr className="border-t border-gray-700 mb-6" />
 
-                {/* 캐러셀 스켈레톤 */}
-                <Carousel
-                  opts={{ loop: true }}
-                  plugins={[]}
-                  orientation="horizontal"
-                  setApi={() => {}}
-                >
-                  <CarouselContent>
-                    {[...Array(skeletonCount)].map(() => (
-                      <CarouselItem
-                        key={uuidv4()}
-                        className="flex-shrink-0 basis-1/5"
-                      >
-                        <Skeleton />
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </Carousel>
-              </div>
-            ))}
-          </div>
-        </main>
-      );
-    }
+    //             {/* 캐러셀 스켈레톤 */}
+    //             <Carousel
+    //               opts={{ loop: true }}
+    //               plugins={[]}
+    //               orientation="horizontal"
+    //               setApi={() => {}}
+    //             >
+    //               <CarouselContent>
+    //                 {[...Array(skeletonCount)].map(() => (
+    //                   <CarouselItem
+    //                     key={uuidv4()}
+    //                     className="flex-shrink-0 basis-1/5"
+    //                   >
+    //                     <Skeleton />
+    //                   </CarouselItem>
+    //                 ))}
+    //               </CarouselContent>
+    //               <CarouselPrevious />
+    //               <CarouselNext />
+    //             </Carousel>
+    //           </div>
+    //         ))}
+    //       </div>
+    //     </main>
+    //   );
+    // }
 
-    if (error) {
-      return <div>에러 발생</div>;
-    }
+    // if (error) {
+    //   return <div>에러 발생</div>;
+    // }
 
     return (
       <main className="w-full flex items-center justify-center">

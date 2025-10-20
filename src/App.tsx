@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Router, RouterProvider } from 'react-router-dom';
 import './App.css';
 
 import Header from './components/ui/TopBar';
@@ -11,9 +11,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from './stores/authStore';
 import { useEffect, useMemo } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getQueryClient } from './config/queryClient';
 
 function App() {
-  const queryClient = useMemo(() => new QueryClient(), []);
+  const queryClient = useMemo(() => getQueryClient(), []);
   const setFirebaseUser = useAuthStore(s => s.setFirebaseUser);
 
   useEffect(() => {
@@ -30,23 +31,21 @@ function App() {
   }, [setFirebaseUser, queryClient]);
   return (
     <QueryClientProvider client={queryClient}>
-      <ProductCategoryProvider>
-        <div
-          className="w-full min-h-screen flex flex-col justify-start  "
-          id="mainSection"
-        >
-          <Header />
-          <SideDrawer />
-          <PageHeader />
-          <div className="flex items-center justify-center flex-grow ">
-            <Outlet />
-          </div>
-          <Footer />
+      <div
+        className="w-full min-h-screen flex flex-col justify-start  "
+        id="mainSection"
+      >
+        <Header />
+        <SideDrawer />
+        <PageHeader />
+        <div className="flex items-center justify-center flex-grow ">
+          <Outlet />
         </div>
-        {process.env.NODE_ENV === 'development' && (
-          <ReactQueryDevtools initialIsOpen={false} />
-        )}
-      </ProductCategoryProvider>
+        <Footer />
+      </div>
+      {process.env.NODE_ENV === 'development' && (
+        <ReactQueryDevtools initialIsOpen={false} />
+      )}
     </QueryClientProvider>
   );
 }
