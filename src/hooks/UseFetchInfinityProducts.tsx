@@ -36,7 +36,6 @@ const FetchProducts = async ({
 }): Promise<FetchProductsResult> => {
   const productsQuery = query(
     collection(db, 'Product'),
-    orderBy('createdAt'),
     ...(pageParam ? [startAfter(pageParam)] : []),
     limit(PAGE_SIZE),
   );

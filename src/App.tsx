@@ -29,6 +29,7 @@ function App() {
     });
     return () => unsubscribe();
   }, [setFirebaseUser, queryClient]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div

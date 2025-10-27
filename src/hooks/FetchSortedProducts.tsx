@@ -20,7 +20,7 @@ const fetchSortedProducts = async (
       const docData = doc.data();
       return {
         id: doc.id,
-        updatedAt: docData.createdAt,
+        createdAt: docData.createdAt,
         productName: docData.productName,
         productPrice: docData.productPrice,
         imageUrl: docData.imageUrl,

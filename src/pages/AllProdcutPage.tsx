@@ -1,12 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import MainProductCard from '@/components/ui/MainProductCard';
 import { useInView } from 'react-intersection-observer';
-import { useProductCategory } from '@/components/context/ProductCategoryContext';
-import { ProductCard } from '@/lib/product';
-import { useFetchSortedProducts } from '@/hooks/FetchSortedProducts';
-import { v4 as uuidv4 } from 'uuid';
-import Skele from '@/components/ui/Skele';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { UseProducts } from '@/hooks/UseFetchInfinityProducts';
 import { useCategoryStore } from '@/stores/categoryStore';
 
@@ -25,51 +19,85 @@ const AllProductPage: React.FC = () => {
     triggerOnce: false,
   });
   const [sortOption, setSortOption] = useState('productPrice');
-  const [sortedProducts, setSortedProducts] = useState<ProductCard[]>([]);
 
-  const handleSortByPrice = () => {
-    setSortOption('productPrice');
+  // const filteredProducts = useMemo(() => {
+  //   if (!data?.pages) return [];
+  //   const allProducts = data.pages.flatMap(page => page.products);
+
+  //   // category 필터링
+  //   const categoryFiltered =
+  //     !category || category === 'all'
+  //       ? allProducts
+  //       : allProducts.filter(p => p.productCategory === category);
+
+  //   // 정렬
+  //   const sorted = [...categoryFiltered].sort((a, b) => {
+  //     if (sortOption === 'productPrice') return b.productPrice - a.productPrice;
+  //     if (sortOption === 'updatedAt')
+  //       return b.createdAt.seconds - a.createdAt.seconds;
+  //     return 0;
+  //   });
+
+  //   return sorted;
+  // }, [data, category, sortOption]);
+
+  // const handleCategoryChange = useCallback(
+  //   (newCategory: string) => setCategory(newCategory),
+  //   [setCategory],
+  // );
+
+  const filteredProducts = () => {
+    if (!data?.pages) return [];
+    const allProducts = data.pages.flatMap(page => page.products);
+
+    // category 필터링
+    const categoryFiltered =
+      !category || category === 'all'
+        ? allProducts
+        : allProducts.filter(p => p.productCategory === category);
+
+    // 정렬
+    const sorted = [...categoryFiltered].sort((a, b) => {
+      if (sortOption === 'productPrice') return b.productPrice - a.productPrice;
+      if (sortOption === 'updatedAt')
+        return b.createdAt.seconds - a.createdAt.seconds;
+      return 0;
+    });
+
+    return sorted;
   };
 
-  const hanldeAllProduct = () => {
-    setCategory('noob');
-  };
-  const hanldeKeyboard = () => {
-    setCategory('keyboard');
-  };
-  const hanldeKey = () => {
-    setCategory('key');
-  };
-  const hanldeaccessory = () => {
-    setCategory('accessory');
+  const handleCategoryChange = (newcategory: string) =>
+    setCategory(newcategory);
+
+  // 2️⃣ 정렬 옵션 변경용 콜백
+  const handleSortChange = useCallback(
+    (option: string) => setSortOption(option),
+    [setSortOption],
+  );
+
+  const renderTitle = () => {
+    if (category === null) return '전체 물품 확인하기';
+    if (category === 'key') return 'KeyCap';
+    if (category === 'keyboard') return 'Keyboard';
+    if (category === 'accessory') return 'Accessory';
+    return category;
   };
 
   useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, fetchNextPage]);
+    if (inView && hasNextPage && !isFetchingNextPage) fetchNextPage();
+  }, [inView, hasNextPage, fetchNextPage, isFetchingNextPage]);
+
   return (
     <main>
       <div className="p-20">
         <div>
-          {category === null ? (
-            <h3 className="text-3xl mb-12"> 전체물품 확인하기</h3>
-          ) : (
-            <h3 className="text-3xl"> {category}</h3>
-          )}
+          <h3 className="text-3xl"> {renderTitle()}</h3>
+
           <div className="flex justify-between">
             <div className="flex">
               <button
-                onClick={hanldeAllProduct}
-                type="button"
-                className="lg:hover:underline"
-              >
-                <h6>전체</h6>
-              </button>
-              <h6> &nbsp;/&nbsp; </h6>
-              <button
-                onClick={handleSortByPrice}
+                onClick={() => handleSortChange('productPrice')}
                 type="button"
                 className="lg:hover:underline"
               >
@@ -77,7 +105,7 @@ const AllProductPage: React.FC = () => {
               </button>
               <h6> &nbsp;/&nbsp; </h6>
               <button
-                onClick={() => setSortOption('updatedAt')}
+                onClick={() => handleSortChange('updatedAt')}
                 className="lg:hover:underline"
                 type="button"
               >
@@ -87,7 +115,7 @@ const AllProductPage: React.FC = () => {
             <div className="flex">
               <div className="flex">
                 <button
-                  onClick={hanldeKeyboard}
+                  onClick={() => handleCategoryChange('keyboard')}
                   type="button"
                   className="lg:hover:underline"
                 >
@@ -95,37 +123,33 @@ const AllProductPage: React.FC = () => {
                 </button>
                 <h6> &nbsp;/&nbsp; </h6>
                 <button
-                  onClick={hanldeKey}
+                  onClick={() => handleCategoryChange('key')}
                   type="button"
                   className="lg:hover:underline"
                 >
-                  key
+                  KeyCap
                 </button>
                 <h6> &nbsp;/&nbsp; </h6>
                 <button
-                  onClick={hanldeaccessory}
+                  onClick={() => handleCategoryChange('accessory')}
                   className="lg:hover:underline"
                   type="button"
                 >
-                  accessory
+                  Accessory
                 </button>
               </div>
             </div>
           </div>
         </div>
+        {/* <div className="grid grid-cols-6 gap-4">
+          {filteredProducts.map((product, idx) => (
+            <MainProductCard key={`${product.id}`} product={product} />
+          ))}
+        </div> */}
         <div className="grid grid-cols-6 gap-4">
-          {data?.pages.flatMap((page, pageIndex) =>
-            page.products
-              .filter(
-                product =>
-                  !category ||
-                  category === 'all' ||
-                  product.productCategory === category,
-              )
-              .map(product => (
-                <MainProductCard key={product.id} product={product} />
-              )),
-          )}
+          {filteredProducts().map(product => (
+            <MainProductCard key={product.id} product={product} />
+          ))}
         </div>
 
         {/* 무한 스크롤 트리거 */}

@@ -20,7 +20,7 @@ const productCardConverter: FirestoreDataConverter<UploadProduct> = {
     const data = snapshot.data(options)!;
     return {
       id: snapshot.id,
-      updatedAt: data.updatedAt,
+      createdAt: data.createdAt,
       productName: data.productName,
       productPrice: data.productPrice,
       imageUrl: data.imageUrl,
@@ -39,17 +39,9 @@ export const fetchProductCardData = async (
   // 🧩 동적 쿼리 구성
   if (category && category !== 'all') {
     if (sortOption === 'price') {
-      IndexOption = query(
-        productRef,
-        where('productCategory', '==', category),
-        orderBy('productPrice', 'desc'),
-      );
+      IndexOption = query(productRef, where('productCategory', '==', category));
     } else if (sortOption === 'date') {
-      IndexOption = query(
-        productRef,
-        where('productCategory', '==', category),
-        orderBy('updatedAt', 'desc'),
-      );
+      IndexOption = query(productRef, where('productCategory', '==', category));
     } else {
       IndexOption = query(productRef, where('productCategory', '==', category));
     }
@@ -57,9 +49,9 @@ export const fetchProductCardData = async (
 
   // 카테고리 전체 보기
   if (sortOption === 'price') {
-    IndexOption = query(productRef, orderBy('productPrice', 'desc'));
+    IndexOption = query(productRef, orderBy('productPrice'));
   } else if (sortOption === 'date') {
-    IndexOption = query(productRef, orderBy('updatedAt', 'desc'));
+    IndexOption = query(productRef, orderBy('createdAt'));
   } else {
     IndexOption = productRef;
   }
