@@ -141,11 +141,11 @@ const AllProductPage: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-6 gap-4">
+        {/* <div className="grid grid-cols-6 gap-4">
           {filteredProducts.map((product, idx) => (
             <MainProductCard key={`${product.id}`} product={product} />
           ))}
-        </div>
+        </div> */}
         <div className="grid grid-cols-6 gap-4">
           {filteredProducts().map(product => (
             <MainProductCard key={product.id} product={product} />

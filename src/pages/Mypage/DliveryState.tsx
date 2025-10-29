@@ -49,6 +49,26 @@ const DliveryState = () => {
           </ol>
         </div>
       </div>
+      <div className="mt-12 flex flex-col items-start">
+        최근 주문 정보
+        <div className=" flex flex-col gap-3 w-full min-h-[200px]  bg-[rgb(182,180,180)] ">
+          <table>
+            <thead>
+              <tr className="flex border border-x-0 border-t-2 py-3">
+                <th className="w-1/5 text-sm ">날짜/주문번호</th>
+                <th className="w-[30%] text-sm">상품명/옵션</th>
+                <th className="w-1/5 text-sm">상품금액/수량</th>
+                <th className="w-1/5 text-sm">주문상태</th>
+                <th className="w-1/4 text-sm">확인/리뷰</th>
+              </tr>
+            </thead>
+            <tbody className="flex justify-center items-center p-16 ">
+              <tr>주문내역이 없습니다</tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="mt-12 flex flex-col gap-3 ">최근 본 상품 </div>
     </div>
   );
 };
