@@ -69,6 +69,7 @@ const DliveryState = () => {
         </div>
       </div>
       <div className="mt-12 flex flex-col gap-3 ">최근 본 상품 </div>
+      <div>상품칸</div>;
     </div>
   );
 };
