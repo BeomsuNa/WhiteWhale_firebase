@@ -99,7 +99,6 @@ export const useSocialAuthStore = create<AuthState>()(
       firebaseUser: null,
       userRoleData: null,
       isLoggedIn: false,
-
       setFirebaseUser: async user => {
         if (!user) {
           set(
@@ -114,7 +113,7 @@ export const useSocialAuthStore = create<AuthState>()(
           return;
         }
 
-        const docRef = doc(db, 'SocialUser', user.uid);
+        const docRef = doc(db, 'TestUsers', user.uid);
         const docSnap = await getDoc(docRef);
 
         let userRoleData: UserRoleData = {

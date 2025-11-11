@@ -70,9 +70,12 @@ function SignUpPage() {
   };
 
   return (
-    <article>
-      SignUp 회원가입 페이지입니다.
-      <form onSubmit={onRegister}>
+    <article className="flex justify-center items-center m-12 min-w-[2000px]">
+      <form
+        onSubmit={onRegister}
+        className="w-full max-w-md max-h-svh min-h-[500px] pl-8 pr-8 pt-8 shadow-md bg-gray-300 rounded-lg"
+      >
+        SignUp 회원가입 페이지입니다.
         <fieldset>
           <legend>
             <p>이메일</p>
@@ -80,6 +83,7 @@ function SignUpPage() {
               type="email"
               id="email"
               value={email}
+              className="border-gray-900"
               onChange={e => setEmail(e.target.value)}
             />
             <Label htmlFor="passWord">비밀번호</Label>
@@ -87,6 +91,7 @@ function SignUpPage() {
               type="password"
               id="passWord"
               value={passWord}
+              className="border-gray-900"
               onChange={e => setPassWord(e.target.value)}
             />
             <Label htmlFor="checkPassWord">비밀번호확인</Label>
@@ -94,6 +99,7 @@ function SignUpPage() {
               type="password"
               id="checkPassWord"
               value={checkpassWord}
+              className="border-gray-900"
               onChange={e => setCheckPassWord(e.target.value)}
             />
             <Label htmlFor="nickName">닉네임</Label>
@@ -101,6 +107,7 @@ function SignUpPage() {
               id="nickName"
               value={nickName}
               onChange={e => setNickName(e.target.value)}
+              className="border-gray-900"
             />
             <Checkbox checked={checked} onCheckedChange={handleCheckBox} />
             <p>판매자입니까?{checked ? 'check' : 'not check'}</p>

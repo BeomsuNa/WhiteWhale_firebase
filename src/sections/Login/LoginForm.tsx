@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthStore } from '@/stores/authStore';
-import { UseSocialLogin } from '@/hooks/UseSocialLogin';
+import { UseSocialLogin, UseTestSocialLogin } from '@/hooks/UseSocialLogin';
 
 interface LoginFormProps {
   onLogin: (email: string, passWord: string) => void;
@@ -16,6 +16,7 @@ const LoginForm: React.FC<LoginFormProps> = () => {
   const navigate = useNavigate();
   const { login } = useAuthStore();
   const { googleLogin, googleLogout } = UseSocialLogin();
+  const { TestgoogleLogin } = UseTestSocialLogin();
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -69,6 +70,13 @@ const LoginForm: React.FC<LoginFormProps> = () => {
             <Button className="w-full">KAKAO</Button>
             <Button className="w-full" onClick={() => googleLogin()}>
               GOOGLE
+            </Button>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-2 mt-5">
+            <Button className="w-full">NAVER(테스트버전입니다)</Button>
+            <Button className="w-full">KAKAO(테스트버전입니다)</Button>
+            <Button className="w-full" onClick={() => TestgoogleLogin()}>
+              GOOGLE(테스트버전입니다)
             </Button>
           </div>
         </footer>
