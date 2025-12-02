@@ -50,7 +50,7 @@ const DliveryState = () => {
         </div>
       </div>
       <div className="mt-12 flex flex-col items-start">
-        최근 주문 정보
+        <h2>최근 주문 정보</h2>
         <div className=" flex flex-col gap-3 w-full min-h-[200px]  bg-[rgb(182,180,180)] ">
           <table>
             <thead>
@@ -68,10 +68,10 @@ const DliveryState = () => {
           </table>
         </div>
       </div>
-      <div className="mt-12 flex flex-col gap-3 bg-[rgb(182,180,180)]">
-        최근 본 상품{' '}
+      <div className="mt-12 flex flex-col gap-3 items-start ">
+        <h3>최근 본 상품 </h3>
+        <div className="mt-2 w-full bg-[rgb(182,180,180)]">상품칸</div>
       </div>
-      <div className="w-full">상품칸</div>;
     </div>
   );
 };

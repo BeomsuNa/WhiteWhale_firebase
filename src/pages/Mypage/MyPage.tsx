@@ -15,7 +15,7 @@ function MyPage() {
         gap-0 mt-12 mb-36
       "
     >
-      <div className="flex w-1/4 h-full pr-8 border-r border-gray-200 ">
+      <div className="flex w-1/4 h-auto pr-8 border-r border-gray-200 ">
         <MenuSide />
       </div>
       <div className="flex flex-1 pl-8 ">

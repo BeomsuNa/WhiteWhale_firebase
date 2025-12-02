@@ -9,25 +9,7 @@ const MenuSide = () => {
       </h2>
 
       <section className="mb-7">
-        <div className="flex flex-row ml-10">
-          <h3 className="font-bold text-base text-gray-700 border-t pt-2 mb-2 border-gray-200 ">
-            쇼핑
-          </h3>
-          <h3 className="font-bold text-base text-gray-700 pt-2 mb-2">정보</h3>
-        </div>
-        <ul className="flex flex-col items-start space-y-2 text-sm pl-2 ml-12 ">
-          <li>- 주문목록/배송조회</li>
-          <li>- 취소/반품/교환 내역</li>
-          <li>- 환불/입금 내역</li>
-          <li>- 찜리스트</li>
-        </ul>
-      </section>
-
-      <section className="mb-7">
         <div className="flex  ml-10">
-          <div className="font-bold text-base text-gray-700 border-t pt-2 mb-2 border-gray-100 ">
-            <h3>&nbsp; &nbsp;&nbsp; &nbsp;</h3>
-          </div>
           <h3 className="font-bold text-base text-gray-700 pt-2 mb-2">
             <span className="border-t-2 border-gray-100 pt-2">쇼핑</span>정보
           </h3>
@@ -42,10 +24,9 @@ const MenuSide = () => {
 
       <section className="mb-7">
         <div className="flex flex-row ml-10">
-          <h3 className="font-bold text-base border-t pt-2 mb-2 border-gray-200 ">
-            혜택
+          <h3 className="font-bold text-base text-gray-700 pt-2 mb-2">
+            <span className="border-t-2 border-gray-100 pt-2">혜택</span>관리
           </h3>
-          <h3 className="font-bold text-base pt-2 mb-2 ">관리</h3>
         </div>
         <ul className="flex flex-col items-start space-y-2 text-sm pl-2 ml-12">
           <li>- 쿠폰</li>
@@ -56,10 +37,9 @@ const MenuSide = () => {
 
       <section className="mb-7">
         <div className="flex flex-row ml-10">
-          <h3 className="font-bold text-base border-t pt-2 mb-2 border-gray-200 ">
-            고객
+          <h3 className="font-bold text-base text-gray-700 pt-2 mb-2">
+            <span className="border-t-2 border-gray-100 pt-2">고객</span>관리
           </h3>
-          <h3 className="font-bold text-base pt-2 mb-2 ">센터</h3>
         </div>
         <ul className="flex flex-col items-start space-y-2 text-sm pl-2 ml-12">
           <li>- 1:1 문의</li>
@@ -68,10 +48,9 @@ const MenuSide = () => {
 
       <section>
         <div className="flex flex-row ml-10">
-          <h3 className="font-bold text-base border-t pt-2 mb-2 border-gray-200 ">
-            회원
+          <h3 className="font-bold text-base text-gray-700 pt-2 mb-2">
+            <span className="border-t-2 border-gray-100 pt-2">회원</span>정보
           </h3>
-          <h3 className="font-bold text-base pt-2 mb-2 ">정보</h3>
         </div>
         <ul className="flex flex-col items-start space-y-2 text-sm pl-2 ml-12">
           <li>
@@ -84,10 +63,10 @@ const MenuSide = () => {
 
       <section>
         <div className="flex flex-row ml-10">
-          <h3 className="font-bold text-base border-t pt-2 mb-2 border-gray-200 ">
-            나의
+          <h3 className="font-bold text-base text-gray-700 pt-2 mb-2">
+            <span className="border-t-2 border-gray-100 pt-2">나의</span>
+            회원정보
           </h3>
-          <h3 className="font-bold text-base pt-2 mb-2 ">상품정보</h3>
         </div>
         <ul className="flex flex-col items-start space-y-2 text-sm pl-2 ml-12">
           <li>- 나의 상품정보</li>
@@ -96,10 +75,9 @@ const MenuSide = () => {
 
       <section>
         <div className="flex flex-row ml-10">
-          <h3 className="font-bold text-base border-t pt-2 mb-2 border-gray-200 ">
-            나의
+          <h3 className="font-bold text-base text-gray-700 pt-2 mb-2">
+            <span className="border-t-2 border-gray-100 pt-2">쇼핑</span>정보
           </h3>
-          <h3 className="font-bold text-base pt-2 mb-2 ">상품후기</h3>
         </div>
         <ul className="flex flex-col items-start space-y-2 text-sm pl-2 ml-12">
           <li>- 나의 상품후기</li>
