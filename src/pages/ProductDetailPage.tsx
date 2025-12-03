@@ -231,7 +231,7 @@ const ProductDetailPage: React.FC<MainProductCardProps> = ({
 
       <footer className="flex flex-col justify-center items-center mt-12 ">
         <h3 className="text-lg font-semibold mb-12">
-          같은 카테고리의 다른 상품들 sdf
+          같은 카테고리의 다른 상품들 
         </h3>
         <div className="w-[80%] mb-24">
           <Carousel
